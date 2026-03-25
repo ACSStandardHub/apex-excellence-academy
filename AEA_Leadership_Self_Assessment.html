@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AEA Leadership Self-Assessment</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0A0C1E;
+    --navy-mid: #141630;
+    --navy-light: #1E2144;
+    --gold: #C4A44A;
+    --gold-light: #E8C96A;
+    --gold-dim: #8A7030;
+    --cream: #F2EDE4;
+    --cream-dim: #C8C0B0;
+    --white: #FFFFFF;
+    --green: #2A7A4A;
+    --green-light: #E8F5EE;
+    --amber: #B8720A;
+    --amber-light: #FEF3DC;
+    --red: #8A2020;
+    --red-light: #FCEBEB;
+    --blue: #1A5FA0;
+    --blue-light: #E6F1FB;
+    --purple: #4A3AAA;
+    --purple-light: #EEEDFE;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--cream);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* STAR FIELD */
+  .stars {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0; overflow: hidden;
+  }
+  .star {
+    position: absolute; border-radius: 50%;
+    background: var(--cream); opacity: 0;
+    animation: twinkle var(--dur) var(--delay) infinite;
+  }
+  @keyframes twinkle {
+    0%,100%{opacity:0} 50%{opacity:var(--op)}
+  }
+
+  /* GOLD WAVE */
+  .wave-line {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0; opacity: .12;
+  }
+
+  /* LAYOUT */
+  .app { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; padding: 0 20px 60px; }
+
+  /* SCREENS */
+  .screen { display: none; animation: fadeUp .5s ease; }
+  .screen.active { display: block; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+  /* COVER */
+  .cover { text-align: center; padding: 60px 0 40px; }
+  .cover-logo { margin: 0 auto 32px; width: 72px; height: 72px; border-radius: 50%; border: 1.5px solid var(--gold); display: flex; align-items: center; justify-content: center; position: relative; }
+  .cover-logo::before { content:''; position:absolute; inset:4px; border-radius:50%; border:1px solid rgba(196,164,74,.3); }
+  .logo-triangle { width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-bottom: 20px solid var(--gold); margin-top: -2px; }
+  .cover-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: .14em; color: var(--gold); text-transform: uppercase; margin-bottom: 16px; }
+  .cover-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(32px, 7vw, 48px); font-weight: 500; color: var(--white); line-height: 1.15; margin-bottom: 12px; }
+  .cover-title span { color: var(--gold); }
+  .cover-sub { font-size: 14px; color: var(--cream-dim); line-height: 1.7; max-width: 460px; margin: 0 auto 32px; }
+  .gold-rule { width: 60px; height: 1px; background: var(--gold); margin: 0 auto 32px; }
+  .cover-dims { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 36px; }
+  .dim-chip { background: rgba(196,164,74,.08); border: 1px solid rgba(196,164,74,.2); border-radius: 8px; padding: 8px 10px; text-align: center; }
+  .dim-chip-label { font-size: 10px; font-weight: 500; letter-spacing: .06em; color: var(--gold); text-transform: uppercase; line-height: 1.4; }
+  .name-section { margin-bottom: 28px; }
+  .name-label { font-size: 12px; font-weight: 500; color: var(--cream-dim); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px; display: block; }
+  .name-input {
+    width: 100%; padding: 14px 16px; background: rgba(255,255,255,.05);
+    border: 1px solid rgba(196,164,74,.3); border-radius: 10px;
+    color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 15px;
+    outline: none; transition: border-color .2s;
+  }
+  .name-input::placeholder { color: rgba(255,255,255,.25); }
+  .name-input:focus { border-color: var(--gold); }
+  .btn-primary {
+    width: 100%; padding: 16px; background: var(--gold);
+    border: none; border-radius: 10px; color: var(--navy);
+    font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500;
+    cursor: pointer; transition: all .2s; letter-spacing: .03em;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-primary:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+  .cover-note { font-size: 11px; color: rgba(255,255,255,.3); margin-top: 14px; line-height: 1.6; }
+
+  /* QUESTION SCREEN */
+  .q-header { padding: 32px 0 24px; }
+  .q-progress-wrap { margin-bottom: 20px; }
+  .q-progress-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--cream-dim); margin-bottom: 8px; }
+  .q-progress-bar { height: 3px; background: rgba(255,255,255,.1); border-radius: 2px; overflow: hidden; }
+  .q-progress-fill { height: 100%; background: var(--gold); border-radius: 2px; transition: width .4s ease; }
+  .q-dim-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 500;
+    letter-spacing: .05em; text-transform: uppercase; margin-bottom: 16px;
+  }
+  .q-dim-dot { width: 6px; height: 6px; border-radius: 50%; }
+  .q-num { font-family: 'Cormorant Garamond', serif; font-size: 13px; color: var(--cream-dim); margin-bottom: 10px; }
+  .q-text { font-family: 'Cormorant Garamond', serif; font-size: clamp(20px,4.5vw,26px); font-weight: 500; color: var(--white); line-height: 1.45; margin-bottom: 28px; }
+  .q-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+  .q-option {
+    padding: 14px 18px; border-radius: 10px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.03);
+    cursor: pointer; transition: all .18s;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .q-option:hover { border-color: var(--gold); background: rgba(196,164,74,.06); }
+  .q-option.selected { border-color: var(--gold); background: rgba(196,164,74,.12); }
+  .q-option-score {
+    width: 28px; height: 28px; border-radius: 6px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 500; border: 1px solid rgba(255,255,255,.15);
+    background: rgba(255,255,255,.04); color: var(--cream-dim); transition: all .18s;
+  }
+  .q-option.selected .q-option-score { background: var(--gold); border-color: var(--gold); color: var(--navy); }
+  .q-option-text { font-size: 14px; color: var(--cream); line-height: 1.5; flex: 1; }
+  .q-option.selected .q-option-text { color: var(--white); }
+  .q-nav { display: flex; gap: 10px; }
+  .btn-back {
+    padding: 14px 20px; border-radius: 10px;
+    border: 1px solid rgba(255,255,255,.15); background: transparent;
+    color: var(--cream-dim); font-family: 'DM Sans', sans-serif; font-size: 14px;
+    cursor: pointer; transition: all .18s;
+  }
+  .btn-back:hover { border-color: rgba(255,255,255,.3); color: var(--cream); }
+  .btn-next {
+    flex: 1; padding: 14px; border-radius: 10px;
+    border: none; background: var(--gold); color: var(--navy);
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+    cursor: pointer; transition: all .18s;
+  }
+  .btn-next:hover { background: var(--gold-light); }
+  .btn-next:disabled { opacity: .35; cursor: not-allowed; }
+
+  /* RESULTS */
+  .results { padding: 40px 0; }
+  .results-header { text-align: center; margin-bottom: 36px; }
+  .results-name { font-family: 'Cormorant Garamond', serif; font-size: 28px; color: var(--gold); margin-bottom: 4px; }
+  .results-title { font-size: 12px; color: var(--cream-dim); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 20px; }
+  .results-gold-rule { width: 40px; height: 1px; background: var(--gold); margin: 0 auto 20px; }
+  .results-summary { font-size: 14px; color: var(--cream-dim); line-height: 1.7; max-width: 480px; margin: 0 auto; }
+
+  /* RADAR */
+  .radar-wrap { display: flex; justify-content: center; margin: 32px 0; }
+  .radar-svg { max-width: 300px; width: 100%; }
+
+  /* DIM RESULTS */
+  .dim-results { display: flex; flex-direction: column; gap: 14px; margin-bottom: 32px; }
+  .dim-result-card {
+    background: rgba(255,255,255,.04); border-radius: 12px;
+    border: 1px solid rgba(255,255,255,.08); padding: 16px;
+    transition: border-color .2s;
+  }
+  .dim-result-card:hover { border-color: rgba(196,164,74,.3); }
+  .dim-result-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .dim-result-name { font-size: 13px; font-weight: 500; color: var(--white); }
+  .dim-result-badge { padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 500; }
+  .badge-meets { background: var(--green-light); color: var(--green); }
+  .badge-developing { background: var(--amber-light); color: var(--amber); }
+  .badge-building { background: var(--red-light); color: var(--red); }
+  .dim-result-bar-wrap { height: 4px; background: rgba(255,255,255,.08); border-radius: 2px; overflow: hidden; margin-bottom: 10px; }
+  .dim-result-bar { height: 100%; border-radius: 2px; transition: width .8s ease; }
+  .dim-result-insight { font-size: 12px; color: var(--cream-dim); line-height: 1.6; }
+
+  /* OVERALL SCORE */
+  .overall-score-wrap { text-align: center; margin-bottom: 36px; }
+  .overall-score-ring { width: 120px; height: 120px; margin: 0 auto 16px; position: relative; }
+  .overall-score-ring svg { transform: rotate(-90deg); }
+  .overall-score-num {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 500; color: var(--white);
+  }
+  .overall-score-label { font-size: 12px; color: var(--cream-dim); letter-spacing: .08em; text-transform: uppercase; }
+
+  /* COMMITMENT */
+  .commitment-section {
+    background: rgba(196,164,74,.06); border: 1px solid rgba(196,164,74,.2);
+    border-radius: 12px; padding: 20px; margin-bottom: 28px;
+  }
+  .commitment-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--gold); margin-bottom: 8px; }
+  .commitment-sub { font-size: 12px; color: var(--cream-dim); margin-bottom: 14px; line-height: 1.6; }
+  .commitment-input {
+    width: 100%; padding: 12px 14px; background: rgba(255,255,255,.05);
+    border: 1px solid rgba(196,164,74,.25); border-radius: 8px;
+    color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 14px;
+    outline: none; resize: none; min-height: 80px; transition: border-color .2s;
+  }
+  .commitment-input:focus { border-color: var(--gold); }
+  .commitment-input::placeholder { color: rgba(255,255,255,.2); }
+
+  .btn-share {
+    width: 100%; padding: 15px; border-radius: 10px;
+    background: transparent; border: 1.5px solid var(--gold);
+    color: var(--gold); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+    cursor: pointer; transition: all .2s; margin-bottom: 12px;
+  }
+  .btn-share:hover { background: rgba(196,164,74,.08); }
+  .btn-restart {
+    width: 100%; padding: 15px; border-radius: 10px;
+    background: transparent; border: 1px solid rgba(255,255,255,.12);
+    color: var(--cream-dim); font-family: 'DM Sans', sans-serif; font-size: 14px;
+    cursor: pointer; transition: all .2s;
+  }
+  .btn-restart:hover { border-color: rgba(255,255,255,.25); color: var(--cream); }
+
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: var(--gold); color: var(--navy); padding: 12px 24px;
+    border-radius: 24px; font-size: 13px; font-weight: 500;
+    transition: transform .3s ease; z-index: 100; white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  .dim-0 { --dc: #2A7A4A; --dl: rgba(42,122,74,.15); }
+  .dim-1 { --dc: #1A5FA0; --dl: rgba(26,95,160,.15); }
+  .dim-2 { --dc: #B8720A; --dl: rgba(184,114,10,.15); }
+  .dim-3 { --dc: #8A2020; --dl: rgba(138,32,32,.15); }
+  .dim-4 { --dc: #6B3AAA; --dl: rgba(107,58,170,.15); }
+  .dim-5 { --dc: #1A5FA0; --dl: rgba(26,95,160,.15); }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="app">
+
+  <!-- COVER -->
+  <div class="screen active" id="screen-cover">
+    <div class="cover">
+      <div class="cover-logo">
+        <div class="logo-triangle"></div>
+      </div>
+      <div class="cover-eyebrow">Apex Excellence Academy</div>
+      <h1 class="cover-title">Leadership<br><span>Self-Assessment</span></h1>
+      <p class="cover-sub">18 questions across 6 leadership dimensions. Honest answers only. This is for you — to see where you are and where you're headed.</p>
+      <div class="gold-rule"></div>
+      <div class="cover-dims">
+        <div class="dim-chip"><div class="dim-chip-label">Presence &<br>Professionalism</div></div>
+        <div class="dim-chip"><div class="dim-chip-label">Communication<br>& Tone</div></div>
+        <div class="dim-chip"><div class="dim-chip-label">Operational<br>Discipline</div></div>
+        <div class="dim-chip"><div class="dim-chip-label">Ownership &<br>Problem-Solving</div></div>
+        <div class="dim-chip"><div class="dim-chip-label">Delegation<br>& Coaching</div></div>
+        <div class="dim-chip"><div class="dim-chip-label">Judgment &<br>Decision-Making</div></div>
+      </div>
+      <div class="name-section">
+        <label class="name-label" for="agent-name">Your name</label>
+        <input class="name-input" id="agent-name" type="text" placeholder="First name is fine" autocomplete="off" oninput="checkName()">
+      </div>
+      <button class="btn-primary" id="btn-start" disabled onclick="startAssessment()">Begin Assessment</button>
+      <p class="cover-note">Takes about 8–10 minutes. All on shift — no homework required.<br>Your results are yours. Results can be shared with your facilitator.</p>
+    </div>
+  </div>
+
+  <!-- QUESTIONS -->
+  <div class="screen" id="screen-questions">
+    <div class="q-header">
+      <div class="q-progress-wrap">
+        <div class="q-progress-label">
+          <span id="q-progress-text">Question 1 of 18</span>
+          <span id="q-progress-pct">0%</span>
+        </div>
+        <div class="q-progress-bar"><div class="q-progress-fill" id="q-progress-fill" style="width:0%"></div></div>
+      </div>
+      <div class="q-dim-badge" id="q-dim-badge"></div>
+      <div class="q-num" id="q-num"></div>
+      <div class="q-text" id="q-text"></div>
+      <div class="q-options" id="q-options"></div>
+      <div class="q-nav">
+        <button class="btn-back" id="btn-back" onclick="prevQ()">Back</button>
+        <button class="btn-next" id="btn-next" disabled onclick="nextQ()">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="screen" id="screen-results">
+    <div class="results">
+      <div class="results-header">
+        <div class="results-name" id="results-name"></div>
+        <div class="results-title">Your Leadership Profile · Week 4 Baseline</div>
+        <div class="results-gold-rule"></div>
+        <div class="results-summary" id="results-summary"></div>
+      </div>
+
+      <div class="overall-score-wrap">
+        <div class="overall-score-ring">
+          <svg viewBox="0 0 120 120" width="120" height="120">
+            <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="8"/>
+            <circle cx="60" cy="60" r="52" fill="none" stroke="var(--gold)" stroke-width="8"
+              stroke-linecap="round" stroke-dasharray="326.7"
+              id="score-circle" stroke-dashoffset="326.7" style="transition:stroke-dashoffset 1.2s ease"/>
+          </svg>
+          <div class="overall-score-num" id="score-num">0</div>
+        </div>
+        <div class="overall-score-label">Overall Leadership Score</div>
+      </div>
+
+      <div class="radar-wrap">
+        <svg class="radar-svg" viewBox="0 0 300 300" id="radar-svg"></svg>
+      </div>
+
+      <div class="dim-results" id="dim-results"></div>
+
+      <div class="commitment-section">
+        <div class="commitment-title">Your One Commitment</div>
+        <div class="commitment-sub">Based on your results — what is one specific thing you will work on before Week 5 begins? Be honest. Be specific.</div>
+        <textarea class="commitment-input" id="commitment-text" placeholder="I commit to..."></textarea>
+      </div>
+
+      <button class="btn-share" onclick="copyResults()">Copy results to share with facilitator</button>
+      <button class="btn-restart" onclick="restart()">Retake assessment</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast">Copied to clipboard</div>
+
+<script>
+const DIMS = [
+  { name: 'Presence & Professionalism', short: 'Presence', color: '#2A7A4A', idx: 0 },
+  { name: 'Communication & Tone',       short: 'Comms',    color: '#1A5FA0', idx: 1 },
+  { name: 'Operational Discipline',     short: 'Ops',      color: '#B8720A', idx: 2 },
+  { name: 'Ownership & Problem-Solving',short: 'Ownership',color: '#A32020', idx: 3 },
+  { name: 'Delegation & Coaching',      short: 'Coaching', color: '#6B3AAA', idx: 4 },
+  { name: 'Judgment & Decisions',       short: 'Judgment', color: '#185FA5', idx: 5 },
+];
+
+const QUESTIONS = [
+  { dim:0, text:'When you arrive for your shift, you are typically...', options:[
+    {s:1,t:'Still getting settled when the first thing comes up'},
+    {s:2,t:'Present but reactive — handling what comes as it comes'},
+    {s:3,t:'Prepared — I know what\'s happening before anything is asked of me'},
+  ]},
+  { dim:0, text:'When something goes wrong on shift, the people around you would say your energy is...', options:[
+    {s:1,t:'Hard to read — can go quiet or tense'},
+    {s:2,t:'Usually steady — I try to stay calm'},
+    {s:3,t:'Consistently grounding — I set the tone for the room'},
+  ]},
+  { dim:0, text:'How often do you hold the same standard at the end of a long shift as you do at the start?', options:[
+    {s:1,t:'Honestly, not always — it depends on the day'},
+    {s:2,t:'Most of the time, but I notice myself slipping occasionally'},
+    {s:3,t:'Consistently — the standard doesn\'t change based on how I feel'},
+  ]},
+  { dim:1, text:'When a resident is frustrated or escalating, your first instinct is to...', options:[
+    {s:1,t:'Match their energy or shut down to protect myself'},
+    {s:2,t:'Stay calm but I sometimes cut conversations short'},
+    {s:3,t:'Regulate first, then respond with control and intention'},
+  ]},
+  { dim:1, text:'How would your coworkers describe your communication when things get busy?', options:[
+    {s:1,t:'Shorter, a little clipped — I\'m focused on getting through it'},
+    {s:2,t:'Mostly professional — I catch myself when I drift'},
+    {s:3,t:'Clear and steady — pressure doesn\'t change how I communicate'},
+  ]},
+  { dim:1, text:'When you need to redirect a conversation that\'s going in the wrong direction, you...', options:[
+    {s:1,t:'Usually let it run its course or walk away'},
+    {s:2,t:'Try to redirect but not always sure how to do it cleanly'},
+    {s:3,t:'Redirect with confidence — I know how to move a conversation forward'},
+  ]},
+  { dim:2, text:'Your shift log at the end of your shift is...', options:[
+    {s:1,t:'A quick summary — I write what I have to write'},
+    {s:2,t:'Decent — I try to note the important things'},
+    {s:3,t:'A real record — anyone reading it could pick up right where I left off'},
+  ]},
+  { dim:2, text:'When you start a shift, you typically...', options:[
+    {s:1,t:'Jump in and figure out what\'s going on as I go'},
+    {s:2,t:'Check the log and ask the outgoing person what happened'},
+    {s:3,t:'Assess the full building picture before the first thing comes up'},
+  ]},
+  { dim:2, text:'How often do you close the loop on things you said you\'d follow up on?', options:[
+    {s:1,t:'Sometimes — things get busy and things fall through'},
+    {s:2,t:'Usually — I try to come back to things I commit to'},
+    {s:3,t:'Always — a commitment to follow up is as real as any other standard'},
+  ]},
+  { dim:3, text:'When something goes wrong on your shift, your first move is...', options:[
+    {s:1,t:'Handle the visible problem and move on'},
+    {s:2,t:'Handle it and think about what caused it after'},
+    {s:3,t:'Identify what actually caused it before deciding how to respond'},
+  ]},
+  { dim:3, text:'When you see something that needs to be addressed but nobody has asked you to address it, you...', options:[
+    {s:1,t:'Note it and wait to see if someone else handles it'},
+    {s:2,t:'Mention it to someone who can act on it'},
+    {s:3,t:'Handle it, document it, and make sure the right person knows'},
+  ]},
+  { dim:3, text:'When an outcome is disappointing — even partially your responsibility — you tend to...', options:[
+    {s:1,t:'Explain the factors that contributed to it'},
+    {s:2,t:'Acknowledge it but focus on what others could have done differently'},
+    {s:3,t:'Own it directly — then focus on what I do differently next time'},
+  ]},
+  { dim:4, text:'When a team member makes a mistake, your instinct is to...', options:[
+    {s:1,t:'Fix it myself — it\'s faster and I know it\'ll be done right'},
+    {s:2,t:'Point out the issue and show them the right way'},
+    {s:3,t:'Ask them what happened and guide them to the answer themselves'},
+  ]},
+  { dim:4, text:'When you delegate a task, you typically...', options:[
+    {s:1,t:'Hand it off and check back in when it\'s done'},
+    {s:2,t:'Explain what needs to happen and check in midway'},
+    {s:3,t:'Delegate clearly, define what done looks like, and confirm completion'},
+  ]},
+  { dim:4, text:'When a team member does something well, you...', options:[
+    {s:1,t:'Let it go — positive feedback can feel awkward'},
+    {s:2,t:'Acknowledge it generally — "good job," "nice work"'},
+    {s:3,t:'Name what they did specifically and why it mattered'},
+  ]},
+  { dim:5, text:'When multiple things compete for your attention at once, you...', options:[
+    {s:1,t:'Handle what feels most urgent in the moment'},
+    {s:2,t:'Try to sequence things but it\'s not always clean'},
+    {s:3,t:'Prioritize clearly: Safety first, then Resident Experience, then Team, then Admin'},
+  ]},
+  { dim:5, text:'When you\'re unsure whether to handle something yourself or escalate, you...', options:[
+    {s:1,t:'Usually handle it myself — I don\'t want to bother anyone'},
+    {s:2,t:'Escalate when it feels serious enough, though timing isn\'t always right'},
+    {s:3,t:'Have a clear threshold — I know when it\'s mine to own and when to escalate early'},
+  ]},
+  { dim:5, text:'Looking back at decisions you\'ve made under pressure in the past month, you would say...', options:[
+    {s:1,t:'I reacted mostly — hard to slow down and think clearly'},
+    {s:2,t:'I made decent calls but not always for the right reasons'},
+    {s:3,t:'My decisions were sound and I could explain my reasoning for each one'},
+  ]},
+];
+
+let agentName = '';
+let currentQ = 0;
+let answers = new Array(18).fill(null);
+
+function genStars() {
+  const c = document.getElementById('stars');
+  for (let i=0;i<120;i++) {
+    const s=document.createElement('div'); s.className='star';
+    const sz=Math.random()<.7?1:Math.random()<.5?2:3;
+    s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--dur:${2+Math.random()*4}s;--delay:${Math.random()*5}s;--op:${.2+Math.random()*.5}`;
+    c.appendChild(s);
+  }
+}
+genStars();
+
+function checkName() {
+  const v = document.getElementById('agent-name').value.trim();
+  document.getElementById('btn-start').disabled = v.length < 2;
+}
+
+function startAssessment() {
+  agentName = document.getElementById('agent-name').value.trim();
+  showScreen('screen-questions');
+  renderQ();
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el = document.getElementById(id);
+  el.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+const DIM_COLORS = ['#2A7A4A','#1A5FA0','#B8720A','#A32020','#6B3AAA','#185FA5'];
+const DIM_BG = ['rgba(42,122,74,.12)','rgba(26,95,160,.12)','rgba(184,114,10,.12)','rgba(163,32,32,.12)','rgba(107,58,170,.12)','rgba(24,95,165,.12)'];
+
+function renderQ() {
+  const q = QUESTIONS[currentQ];
+  const dim = DIMS[q.dim];
+  const total = QUESTIONS.length;
+
+  document.getElementById('q-progress-text').textContent = `Question ${currentQ+1} of ${total}`;
+  const pct = Math.round((currentQ/total)*100);
+  document.getElementById('q-progress-pct').textContent = pct+'%';
+  document.getElementById('q-progress-fill').style.width = pct+'%';
+
+  const badge = document.getElementById('q-dim-badge');
+  badge.style.background = DIM_BG[q.dim];
+  badge.style.color = DIM_COLORS[q.dim];
+  badge.style.border = `1px solid ${DIM_COLORS[q.dim]}40`;
+  badge.innerHTML = `<div class="q-dim-dot" style="background:${DIM_COLORS[q.dim]}"></div>${dim.name}`;
+
+  document.getElementById('q-num').textContent = `Question ${currentQ+1}`;
+  document.getElementById('q-text').textContent = q.text;
+
+  const optWrap = document.getElementById('q-options');
+  optWrap.innerHTML = '';
+  q.options.forEach((opt,i) => {
+    const div = document.createElement('div');
+    div.className = 'q-option' + (answers[currentQ]===opt.s?' selected':'');
+    div.innerHTML = `<div class="q-option-score">${opt.s}</div><div class="q-option-text">${opt.t}</div>`;
+    div.onclick = () => selectOpt(opt.s);
+    optWrap.appendChild(div);
+  });
+
+  document.getElementById('btn-back').style.display = currentQ===0?'none':'block';
+  document.getElementById('btn-next').disabled = answers[currentQ]===null;
+  document.getElementById('btn-next').textContent = currentQ===total-1 ? 'See my results' : 'Continue';
+}
+
+function selectOpt(score) {
+  answers[currentQ] = score;
+  renderQ();
+}
+
+function nextQ() {
+  if (answers[currentQ]===null) return;
+  if (currentQ===QUESTIONS.length-1) { showResults(); return; }
+  currentQ++;
+  renderQ();
+}
+
+function prevQ() {
+  if (currentQ>0) { currentQ--; renderQ(); }
+}
+
+function getDimScores() {
+  const scores = DIMS.map(()=>({total:0,count:0}));
+  QUESTIONS.forEach((q,i) => {
+    if (answers[i]!==null) { scores[q.dim].total+=answers[i]; scores[q.dim].count++; }
+  });
+  return scores.map(s => s.count>0 ? (s.total/s.count/3)*100 : 0);
+}
+
+function getBadge(pct) {
+  if (pct>=80) return {label:'Meets Standard', cls:'badge-meets'};
+  if (pct>=50) return {label:'Developing', cls:'badge-developing'};
+  return {label:'Still Building', cls:'badge-building'};
+}
+
+function getBarColor(pct) {
+  if (pct>=80) return '#2A7A4A';
+  if (pct>=50) return '#B8720A';
+  return '#A32020';
+}
+
+const INSIGHTS = [
+  ['Your presence is your brand. You\'re showing up with intention and your standard is consistent — people feel it before you say a word.','You\'re building your presence. The awareness is there. The next step is consistency — same standard, every shift, regardless of conditions.','Presence is learned, not given. Start with one thing: arrive ready before the first thing asks something of you.'],
+  ['Your communication is a leadership tool. You regulate first, then the room follows. That\'s a rare skill.','You\'re developing your communication muscle. You know what good looks like — keep catching yourself in the moments when pressure pushes your tone.','Communication under pressure is the hardest skill to build. Notice your tone before you respond. That one pause is everything.'],
+  ['Your operational discipline is a foundation others can rely on. Your logs, your handoffs, your follow-through — they protect the building.','You\'re building the discipline. The habits are forming. Focus on the handoff and the log — those two things compound over time.','Documentation and follow-through are the invisible work of leadership. Start with one shift, one complete log. Build from there.'],
+  ['You own outcomes — not just tasks. That\'s what separates leaders from strong individual contributors. Keep it.','You\'re developing your ownership instinct. The shift from explaining to owning is everything. Name it out loud next time something goes wrong.','Ownership starts with one sentence: "Here\'s what I\'ll do differently." Not explanation. Not context. Just the next move.'],
+  ['You develop others, not just yourself. The people on your team are better because you\'re paying attention to their growth. That\'s leadership.','You\'re building the coaching habit. Resist the urge to do it yourself. Ask the question instead of giving the answer.','Delegation is trust. Try one thing: hand off one task today and let the outcome be theirs — not yours to fix.'],
+  ['Your judgment is sound. You prioritize correctly, you know your escalation threshold, and you can explain your reasoning. That\'s readiness.','Your judgment is developing. The framework is there — Safety, Residents, Team, Admin. Use it explicitly until it becomes instinct.','Judgment builds through reps. Name your priority sequence out loud on your next shift. Saying it makes it real.'],
+];
+
+function showResults() {
+  const dimScores = getDimScores();
+  const overall = Math.round(dimScores.reduce((a,b)=>a+b,0)/dimScores.length);
+
+  document.getElementById('results-name').textContent = agentName;
+
+  const summaries = ['Keep building — your baseline is set. The next 8 weeks will show you how far you can go.','Solid foundation. Real awareness. This is where growth starts.','Strong in key areas, developing in others. That\'s exactly where you should be at Week 4.'];
+  document.getElementById('results-summary').textContent = overall>=75?summaries[2]:overall>=55?summaries[1]:summaries[0];
+
+  setTimeout(()=>{
+    const circle = document.getElementById('score-circle');
+    const circumference = 326.7;
+    circle.style.strokeDashoffset = circumference - (circumference * overall/100);
+    let n=0; const target=overall;
+    const timer = setInterval(()=>{ n=Math.min(n+2,target); document.getElementById('score-num').textContent=n; if(n>=target)clearInterval(timer); },20);
+  },300);
+
+  drawRadar(dimScores);
+
+  const dimWrap = document.getElementById('dim-results');
+  dimWrap.innerHTML = '';
+  DIMS.forEach((dim,i) => {
+    const pct = Math.round(dimScores[i]);
+    const badge = getBadge(pct);
+    const ins = pct>=80?INSIGHTS[i][0]:pct>=50?INSIGHTS[i][1]:INSIGHTS[i][2];
+    const card = document.createElement('div');
+    card.className='dim-result-card';
+    card.innerHTML=`
+      <div class="dim-result-top">
+        <div class="dim-result-name">${dim.name}</div>
+        <div class="dim-result-badge ${badge.cls}">${badge.label}</div>
+      </div>
+      <div class="dim-result-bar-wrap">
+        <div class="dim-result-bar" style="width:0%;background:${getBarColor(pct)}" data-width="${pct}%"></div>
+      </div>
+      <div class="dim-result-insight">${ins}</div>`;
+    dimWrap.appendChild(card);
+  });
+
+  setTimeout(()=>{
+    document.querySelectorAll('.dim-result-bar').forEach(b=>{
+      b.style.width = b.dataset.width;
+    });
+  },400);
+
+  showScreen('screen-results');
+}
+
+function drawRadar(scores) {
+  const svg = document.getElementById('radar-svg');
+  const cx=150,cy=150,r=100;
+  const n=6;
+  const angles = Array.from({length:n},(_,i)=>(i/n)*Math.PI*2 - Math.PI/2);
+
+  let html='';
+
+  // Grid rings
+  [0.25,0.5,0.75,1].forEach(f=>{
+    const pts=angles.map(a=>[cx+r*f*Math.cos(a),cy+r*f*Math.sin(a)]);
+    html+=`<polygon points="${pts.map(p=>p.join(',')).join(' ')}" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1"/>`;
+  });
+
+  // Axes
+  angles.forEach(a=>{
+    html+=`<line x1="${cx}" y1="${cy}" x2="${cx+r*Math.cos(a)}" y2="${cy+r*Math.sin(a)}" stroke="rgba(255,255,255,.1)" stroke-width="1"/>`;
+  });
+
+  // Data polygon
+  const dataPts = angles.map((a,i)=>[cx+(scores[i]/100)*r*Math.cos(a), cy+(scores[i]/100)*r*Math.sin(a)]);
+  html+=`<polygon points="${dataPts.map(p=>p.join(',')).join(' ')}" fill="rgba(196,164,74,.15)" stroke="var(--gold)" stroke-width="1.5"/>`;
+
+  // Dots
+  dataPts.forEach((p,i)=>{
+    html+=`<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="${DIM_COLORS[i]}" stroke="var(--navy)" stroke-width="1.5"/>`;
+  });
+
+  // Labels
+  const labelR = r+24;
+  const labels=['Presence','Comms','Ops','Ownership','Coaching','Judgment'];
+  angles.forEach((a,i)=>{
+    const x=cx+labelR*Math.cos(a), y=cy+labelR*Math.sin(a);
+    const anchor=x<cx-5?'end':x>cx+5?'start':'middle';
+    html+=`<text x="${x}" y="${y+4}" text-anchor="${anchor}" font-size="10" font-family="DM Sans,sans-serif" fill="rgba(255,255,255,.5)">${labels[i]}</text>`;
+  });
+
+  svg.innerHTML=html;
+}
+
+function copyResults() {
+  const dimScores = getDimScores();
+  const commitment = document.getElementById('commitment-text').value.trim();
+  let text = `AEA Leadership Self-Assessment — Week 4 Baseline\n`;
+  text += `Agent: ${agentName}\n`;
+  text += `Date: ${new Date().toLocaleDateString()}\n\n`;
+  DIMS.forEach((d,i)=>{
+    const pct=Math.round(dimScores[i]);
+    const badge=getBadge(pct);
+    text+=`${d.name}: ${pct}% — ${badge.label}\n`;
+  });
+  const overall=Math.round(dimScores.reduce((a,b)=>a+b,0)/dimScores.length);
+  text+=`\nOverall: ${overall}%\n`;
+  if(commitment) text+=`\nCommitment: ${commitment}`;
+  navigator.clipboard.writeText(text).then(()=>{
+    const t=document.getElementById('toast');
+    t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'),2500);
+  });
+}
+
+function restart() {
+  currentQ=0; answers=new Array(18).fill(null);
+  document.getElementById('agent-name').value='';
+  document.getElementById('btn-start').disabled=true;
+  showScreen('screen-cover');
+}
+</script>
+</body>
+</html>
