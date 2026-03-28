@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Apex Excellence Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #080B1E;
+  --navy-mid: #0F1229;
+  --navy-light: #181B38;
+  --navy-card: #111428;
+  --gold: #C4A44A;
+  --gold-light: #F0D295;
+  --gold-dim: #8A7030;
+  --gold-glow: rgba(196,164,74,0.15);
+  --cream: #F2EDE4;
+  --cream-dim: #9A9480;
+  --white: #FFFFFF;
+  --green: #1E6B3C;
+  --green-light: rgba(30,107,60,0.15);
+  --amber: #9A6010;
+  --amber-light: rgba(154,96,16,0.15);
+  --red: #7A1C1C;
+  --red-light: rgba(122,28,28,0.15);
+  --blue: #1A4E8A;
+  --purple: #4A2E9A;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);overscroll-behavior:none;}
+
+/* ===== STAR FIELD ===== */
+#starfield{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.star{position:absolute;border-radius:50%;background:var(--cream);animation:twinkle var(--d) var(--dl) infinite ease-in-out;}
+@keyframes twinkle{0%,100%{opacity:0}50%{opacity:var(--op)}}
+
+/* ===== APP SHELL ===== */
+#app{position:relative;z-index:1;width:100%;height:100%;display:flex;flex-direction:column;overflow:hidden;}
+
+/* ===== SCREENS ===== */
+.screen{display:none;flex-direction:column;height:100%;overflow:hidden;}
+.screen.active{display:flex;animation:fadeUp .4s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== SCROLL CONTENT ===== */
+.scroll-body{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:90px;}
+.scroll-body::-webkit-scrollbar{display:none;}
+
+/* ===== BOTTOM NAV ===== */
+#bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  background:rgba(8,11,30,0.95);
+  backdrop-filter:blur(20px);
+  border-top:1px solid rgba(196,164,74,0.15);
+  display:flex;align-items:center;justify-content:space-around;
+  padding:8px 0 max(8px, env(safe-area-inset-bottom));
+  height:72px;
+}
+.nav-item{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:6px 16px;border-radius:10px;cursor:pointer;transition:all .2s;
+  flex:1;
+}
+.nav-item .nav-icon{font-size:20px;line-height:1;transition:transform .2s;}
+.nav-item .nav-label{font-size:10px;font-weight:500;letter-spacing:.04em;color:var(--cream-dim);transition:color .2s;}
+.nav-item.active .nav-label{color:var(--gold);}
+.nav-item.active .nav-icon{transform:scale(1.15);}
+
+/* ===== IDENTITY SCREEN ===== */
+#screen-identity{background:var(--navy);}
+.identity-inner{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px 28px;text-align:center;}
+.aea-emblem{width:80px;height:80px;border-radius:50%;border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;position:relative;margin:0 auto 28px;}
+.aea-emblem::before{content:'';position:absolute;inset:5px;border-radius:50%;border:1px solid rgba(196,164,74,0.25);}
+.emblem-tri{width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-bottom:22px solid var(--gold);margin-top:-2px;}
+.identity-eyebrow{font-size:11px;font-weight:500;letter-spacing:.16em;color:var(--gold);text-transform:uppercase;margin-bottom:14px;}
+.identity-title{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,8vw,52px);font-weight:500;color:var(--white);line-height:1.1;margin-bottom:10px;}
+.identity-title span{color:var(--gold);}
+.identity-sub{font-size:13px;color:var(--cream-dim);line-height:1.7;max-width:340px;margin:0 auto 36px;}
+.gold-rule{width:50px;height:1px;background:var(--gold);margin:0 auto 32px;}
+.identity-cohort-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(196,164,74,0.08);border:1px solid rgba(196,164,74,0.2);
+  border-radius:20px;padding:6px 14px;font-size:11px;font-weight:500;
+  letter-spacing:.08em;color:var(--gold);text-transform:uppercase;margin-bottom:32px;
+}
+.cohort-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.field-label{font-size:11px;font-weight:500;letter-spacing:.08em;color:var(--cream-dim);text-transform:uppercase;display:block;text-align:left;margin-bottom:8px;}
+.field-input{
+  width:100%;padding:14px 16px;background:rgba(255,255,255,0.05);
+  border:1px solid rgba(196,164,74,0.3);border-radius:10px;
+  color:var(--white);font-family:'DM Sans',sans-serif;font-size:15px;
+  outline:none;transition:border-color .2s;margin-bottom:12px;
+}
+.field-input::placeholder{color:rgba(255,255,255,0.2);}
+.field-input:focus{border-color:var(--gold);}
+.site-select{
+  width:100%;padding:14px 16px;background:rgba(255,255,255,0.05);
+  border:1px solid rgba(196,164,74,0.3);border-radius:10px;
+  color:var(--white);font-family:'DM Sans',sans-serif;font-size:15px;
+  outline:none;appearance:none;cursor:pointer;margin-bottom:24px;
+}
+.site-select option{background:var(--navy-mid);color:var(--white);}
+.btn-gold{
+  width:100%;padding:16px;border:none;border-radius:10px;
+  background:var(--gold);color:var(--navy);
+  font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;
+  cursor:pointer;transition:all .2s;letter-spacing:.03em;
+}
+.btn-gold:hover{background:var(--gold-light);}
+.btn-gold:disabled{opacity:.4;cursor:not-allowed;}
+
+/* ===== HOME SCREEN ===== */
+#screen-home .scroll-body{padding-top:0;}
+.home-header{
+  padding:52px 24px 24px;
+  background:linear-gradient(180deg,rgba(8,11,30,1) 0%,rgba(8,11,30,0) 100%);
+  position:relative;
+}
+.home-greeting-sm{font-size:11px;font-weight:500;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:6px;}
+.home-greeting{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,6vw,36px);font-weight:500;color:var(--white);line-height:1.2;}
+.home-greeting span{color:var(--gold);}
+.home-week-strip{
+  margin:0 20px 20px;
+  background:var(--navy-card);border:1px solid rgba(196,164,74,0.2);
+  border-radius:14px;padding:16px 18px;
+  display:flex;align-items:center;gap:14px;
+}
+.week-strip-icon{font-size:24px;}
+.week-strip-label{font-size:10px;font-weight:500;letter-spacing:.1em;color:var(--gold);text-transform:uppercase;margin-bottom:3px;}
+.week-strip-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--white);}
+.week-strip-arrow{margin-left:auto;color:var(--gold);font-size:18px;}
+.home-section-label{font-size:10px;font-weight:600;letter-spacing:.14em;color:var(--cream-dim);text-transform:uppercase;padding:0 24px;margin-bottom:12px;}
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 20px;margin-bottom:24px;}
+.quick-card{
+  background:var(--navy-card);border:1px solid rgba(255,255,255,0.07);
+  border-radius:14px;padding:18px 16px;cursor:pointer;
+  transition:all .2s;position:relative;overflow:hidden;
+}
+.quick-card:hover,.quick-card:active{border-color:rgba(196,164,74,0.4);transform:translateY(-1px);}
+.quick-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(196,164,74,0.06) 0%,transparent 60%);
+  pointer-events:none;
+}
+.qc-icon{font-size:22px;margin-bottom:10px;}
+.qc-title{font-size:13px;font-weight:500;color:var(--white);margin-bottom:4px;}
+.qc-sub{font-size:11px;color:var(--cream-dim);line-height:1.5;}
+.qc-badge{
+  position:absolute;top:12px;right:12px;
+  background:var(--gold);color:var(--navy);
+  font-size:9px;font-weight:600;padding:2px 6px;border-radius:8px;
+}
+.commitment-preview{
+  margin:0 20px 24px;background:rgba(196,164,74,0.06);
+  border:1px solid rgba(196,164,74,0.2);border-radius:14px;padding:16px 18px;
+}
+.cp-label{font-size:10px;font-weight:500;letter-spacing:.1em;color:var(--gold);text-transform:uppercase;margin-bottom:8px;}
+.cp-text{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--cream);line-height:1.5;font-style:italic;}
+.cp-empty{font-size:13px;color:var(--cream-dim);cursor:pointer;text-decoration:underline;text-underline-offset:3px;}
+.streak-bar{
+  margin:0 20px 28px;background:var(--navy-card);
+  border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:16px 18px;
+}
+.streak-label{font-size:10px;font-weight:500;letter-spacing:.1em;color:var(--cream-dim);text-transform:uppercase;margin-bottom:12px;}
+.streak-dots{display:flex;gap:6px;}
+.streak-dot{
+  width:32px;height:32px;border-radius:8px;display:flex;align-items:center;
+  justify-content:center;font-size:13px;font-weight:500;
+  border:1px solid rgba(255,255,255,0.1);color:var(--cream-dim);background:rgba(255,255,255,0.03);
+}
+.streak-dot.done{background:rgba(196,164,74,0.15);border-color:rgba(196,164,74,0.4);color:var(--gold);}
+.streak-dot.today{background:var(--gold);border-color:var(--gold);color:var(--navy);}
+
+/* ===== WEEK FEED ===== */
+.feed-header{padding:52px 24px 20px;}
+.feed-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:500;color:var(--white);margin-bottom:4px;}
+.feed-sub{font-size:12px;color:var(--cream-dim);}
+.week-card{
+  margin:0 20px 16px;background:var(--navy-card);
+  border:1px solid rgba(255,255,255,0.08);border-radius:14px;overflow:hidden;
+  cursor:pointer;transition:all .2s;
+}
+.week-card:hover{border-color:rgba(196,164,74,0.3);}
+.week-card-header{
+  padding:16px 18px 12px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.wch-left{display:flex;align-items:center;gap:10px;}
+.wch-num{
+  width:36px;height:36px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:600;
+}
+.wch-num.current{background:var(--gold);color:var(--navy);}
+.wch-num.past{background:rgba(196,164,74,0.15);color:var(--gold);}
+.wch-num.future{background:rgba(255,255,255,0.05);color:var(--cream-dim);}
+.wch-info{}
+.wch-week{font-size:10px;font-weight:500;letter-spacing:.1em;color:var(--cream-dim);text-transform:uppercase;}
+.wch-theme{font-size:14px;font-weight:500;color:var(--white);}
+.wch-status{font-size:11px;padding:3px 10px;border-radius:10px;}
+.status-active{background:rgba(196,164,74,0.12);color:var(--gold);}
+.status-complete{background:var(--green-light);color:#3DAA6A;}
+.status-locked{background:rgba(255,255,255,0.05);color:var(--cream-dim);}
+.week-card-body{padding:0 18px 16px;}
+.wcb-focus{font-size:13px;color:var(--cream-dim);line-height:1.6;margin-bottom:10px;}
+.wcb-challenge{
+  background:rgba(196,164,74,0.06);border-radius:8px;padding:10px 12px;
+  font-size:12px;color:var(--cream);line-height:1.6;border-left:2px solid var(--gold);
+}
+.wcb-challenge-label{font-size:10px;font-weight:600;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;}
+
+/* ===== SCENARIO TRAINER ===== */
+.scenario-header{padding:52px 24px 20px;}
+.scenario-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:500;color:var(--white);margin-bottom:4px;}
+.scenario-sub{font-size:12px;color:var(--cream-dim);}
+.scenario-card{margin:0 20px 16px;}
+.sc-inner{
+  background:var(--navy-card);border:1px solid rgba(255,255,255,0.08);
+  border-radius:16px;overflow:hidden;
+}
+.sc-top{
+  padding:18px 20px 14px;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.sc-dim-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:4px 10px;border-radius:12px;font-size:10px;font-weight:500;
+  letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px;
+}
+.sc-situation-label{font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--cream-dim);text-transform:uppercase;margin-bottom:8px;}
+.sc-situation{font-family:'Cormorant Garamond',serif;font-size:clamp(18px,4vw,22px);color:var(--white);line-height:1.5;}
+.sc-options{padding:14px 20px;}
+.sc-opt{
+  padding:13px 16px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.03);margin-bottom:10px;cursor:pointer;
+  transition:all .18s;display:flex;align-items:flex-start;gap:12px;
+}
+.sc-opt:last-child{margin-bottom:0;}
+.sc-opt:hover{border-color:rgba(196,164,74,0.35);background:rgba(196,164,74,0.04);}
+.sc-opt.selected-best{border-color:#2A7A4A;background:rgba(42,122,74,0.1);}
+.sc-opt.selected-ok{border-color:#B8720A;background:rgba(184,114,10,0.1);}
+.sc-opt.selected-miss{border-color:#8A2020;background:rgba(138,32,32,0.1);}
+.sc-opt.reveal-best{border-color:#2A7A4A;background:rgba(42,122,74,0.07);}
+.sc-opt.reveal-ok{border-color:#B8720A;background:rgba(184,114,10,0.07);}
+.sc-opt.reveal-miss{border-color:rgba(255,255,255,0.08);background:transparent;opacity:.5;}
+.sc-opt-letter{
+  width:26px;height:26px;border-radius:6px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:600;border:1px solid rgba(255,255,255,0.15);
+  background:rgba(255,255,255,0.04);color:var(--cream-dim);transition:all .18s;
+}
+.sc-opt-text{font-size:13px;color:var(--cream);line-height:1.5;flex:1;}
+.sc-feedback{
+  margin:14px 20px;padding:14px 16px;
+  border-radius:10px;background:rgba(196,164,74,0.06);
+  border:1px solid rgba(196,164,74,0.2);
+  display:none;
+}
+.sc-feedback.show{display:block;animation:fadeUp .3s ease;}
+.sc-feedback-label{font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--gold);text-transform:uppercase;margin-bottom:6px;}
+.sc-feedback-text{font-size:13px;color:var(--cream);line-height:1.65;}
+.sc-next-btn{
+  display:block;width:calc(100% - 40px);margin:14px 20px 0;
+  padding:14px;border:none;border-radius:10px;
+  background:var(--gold);color:var(--navy);
+  font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;
+  cursor:pointer;transition:all .2s;display:none;
+}
+.sc-next-btn.show{display:block;}
+.scenario-complete{
+  margin:0 20px;padding:28px 24px;text-align:center;
+  background:rgba(196,164,74,0.06);border:1px solid rgba(196,164,74,0.2);
+  border-radius:16px;display:none;
+}
+.scenario-complete.show{display:block;animation:fadeUp .4s ease;}
+.sc-complete-icon{font-size:40px;margin-bottom:12px;}
+.sc-complete-title{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--gold);margin-bottom:8px;}
+.sc-complete-sub{font-size:13px;color:var(--cream-dim);line-height:1.65;margin-bottom:20px;}
+.sc-score-display{
+  display:flex;justify-content:center;gap:20px;margin-bottom:20px;
+}
+.sc-score-item{text-align:center;}
+.sc-score-num{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:500;color:var(--white);}
+.sc-score-label{font-size:10px;color:var(--cream-dim);letter-spacing:.08em;text-transform:uppercase;}
+.btn-outline-gold{
+  width:100%;padding:14px;border-radius:10px;
+  border:1.5px solid var(--gold);background:transparent;
+  color:var(--gold);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;
+  cursor:pointer;transition:all .2s;
+}
+.btn-outline-gold:hover{background:rgba(196,164,74,0.08);}
+
+/* ===== REFLECTION ===== */
+.reflect-header{padding:52px 24px 20px;}
+.reflect-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:500;color:var(--white);margin-bottom:4px;}
+.reflect-sub{font-size:12px;color:var(--cream-dim);}
+.reflect-week-selector{
+  display:flex;gap:8px;padding:0 20px;margin-bottom:20px;overflow-x:auto;
+  scrollbar-width:none;-webkit-scrollbar:{display:none}
+}
+.rws-chip{
+  flex-shrink:0;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:500;
+  border:1px solid rgba(255,255,255,0.1);color:var(--cream-dim);cursor:pointer;
+  transition:all .2s;white-space:nowrap;
+}
+.rws-chip.active{background:rgba(196,164,74,0.12);border-color:rgba(196,164,74,0.4);color:var(--gold);}
+.reflect-form{margin:0 20px;}
+.reflect-q{margin-bottom:20px;}
+.reflect-q-label{font-size:12px;font-weight:500;color:var(--cream-dim);margin-bottom:8px;line-height:1.5;}
+.reflect-q-num{color:var(--gold);font-size:10px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px;}
+.reflect-textarea{
+  width:100%;padding:12px 14px;background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.1);border-radius:10px;
+  color:var(--white);font-family:'DM Sans',sans-serif;font-size:13px;
+  outline:none;resize:none;min-height:80px;transition:border-color .2s;line-height:1.6;
+}
+.reflect-textarea:focus{border-color:rgba(196,164,74,0.4);}
+.reflect-textarea::placeholder{color:rgba(255,255,255,0.18);}
+.reflect-rating{display:flex;gap:8px;margin-top:6px;}
+.rating-dot{
+  width:36px;height:36px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:500;color:var(--cream-dim);cursor:pointer;transition:all .18s;
+}
+.rating-dot.selected{background:var(--gold);border-color:var(--gold);color:var(--navy);}
+.reflect-submit{
+  width:100%;padding:15px;border:none;border-radius:10px;
+  background:var(--gold);color:var(--navy);
+  font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;
+  cursor:pointer;transition:all .2s;margin-bottom:8px;
+}
+.reflect-saved{
+  display:none;padding:16px;text-align:center;border-radius:10px;
+  background:rgba(30,107,60,0.1);border:1px solid rgba(30,107,60,0.3);
+  font-size:13px;color:#3DAA6A;
+}
+.reflect-saved.show{display:block;animation:fadeUp .3s ease;}
+
+/* ===== PROGRESS TRACKER ===== */
+.progress-header{padding:52px 24px 20px;}
+.progress-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:500;color:var(--white);margin-bottom:4px;}
+.progress-sub{font-size:12px;color:var(--cream-dim);}
+.radar-container{display:flex;justify-content:center;padding:0 20px 20px;}
+.radar-container svg{max-width:260px;width:100%;}
+.dim-progress-list{padding:0 20px;margin-bottom:24px;}
+.dim-prog-item{
+  background:var(--navy-card);border:1px solid rgba(255,255,255,0.07);
+  border-radius:12px;padding:14px 16px;margin-bottom:10px;
+}
+.dpi-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.dpi-name{font-size:13px;font-weight:500;color:var(--white);display:flex;align-items:center;gap:8px;}
+.dpi-dot{width:8px;height:8px;border-radius:50%;}
+.dpi-pct{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold);}
+.dpi-bar-wrap{height:4px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden;}
+.dpi-bar{height:100%;border-radius:2px;transition:width 1s ease;}
+.overall-ring-wrap{display:flex;flex-direction:column;align-items:center;padding:20px 20px 0;}
+.overall-ring-label{font-size:11px;letter-spacing:.1em;color:var(--cream-dim);text-transform:uppercase;margin-top:8px;}
+.ring-svg{position:relative;display:inline-block;}
+.ring-center{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:500;color:var(--white);
+}
+
+/* ===== COMMITMENT WALL ===== */
+.commit-header{padding:52px 24px 20px;}
+.commit-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:500;color:var(--white);margin-bottom:4px;}
+.commit-sub{font-size:12px;color:var(--cream-dim);}
+.commit-card{
+  margin:0 20px 20px;padding:24px 22px;
+  background:rgba(196,164,74,0.06);border:1px solid rgba(196,164,74,0.25);
+  border-radius:16px;
+}
+.commit-card-label{font-size:10px;font-weight:600;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:12px;}
+.commit-display{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,5vw,26px);color:var(--white);line-height:1.5;font-style:italic;margin-bottom:16px;}
+.commit-set-date{font-size:11px;color:var(--cream-dim);}
+.commit-edit-area{margin:0 20px 20px;}
+.commit-edit-label{font-size:11px;font-weight:500;letter-spacing:.08em;color:var(--cream-dim);text-transform:uppercase;margin-bottom:8px;}
+.commit-textarea{
+  width:100%;padding:14px 16px;background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.1);border-radius:10px;
+  color:var(--white);font-family:'Cormorant Garamond',serif;font-size:16px;
+  outline:none;resize:none;min-height:100px;transition:border-color .2s;
+  line-height:1.6;
+}
+.commit-textarea:focus{border-color:rgba(196,164,74,0.4);}
+.commit-textarea::placeholder{color:rgba(255,255,255,0.18);font-style:italic;}
+.commit-save-btn{
+  display:block;width:calc(100% - 40px);margin:0 20px 16px;
+  padding:15px;border:none;border-radius:10px;
+  background:var(--gold);color:var(--navy);
+  font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;
+  cursor:pointer;
+}
+.commit-history{padding:0 20px;}
+.commit-history-label{font-size:10px;font-weight:600;letter-spacing:.12em;color:var(--cream-dim);text-transform:uppercase;margin-bottom:12px;}
+.commit-log-item{
+  padding:12px 14px;background:var(--navy-card);border-radius:10px;
+  border:1px solid rgba(255,255,255,0.06);margin-bottom:8px;
+}
+.cli-date{font-size:10px;color:var(--gold);letter-spacing:.06em;margin-bottom:4px;}
+.cli-text{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--cream);line-height:1.5;font-style:italic;}
+
+/* ===== FACILITATOR VIEW ===== */
+.fac-header{padding:52px 24px 20px;}
+.fac-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:500;color:var(--white);margin-bottom:4px;}
+.fac-sub{font-size:12px;color:var(--cream-dim);}
+.fac-passcode{
+  margin:40px 20px 0;text-align:center;
+}
+.fac-lock-icon{font-size:40px;margin-bottom:16px;}
+.fac-lock-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--white);margin-bottom:8px;}
+.fac-lock-sub{font-size:13px;color:var(--cream-dim);margin-bottom:24px;}
+.fac-pin-row{display:flex;gap:8px;justify-content:center;margin-bottom:20px;}
+.fac-pin-dot{
+  width:48px;height:48px;border-radius:10px;
+  border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.04);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;color:var(--white);font-weight:500;
+}
+.fac-pin-dot.filled{border-color:rgba(196,164,74,0.4);background:rgba(196,164,74,0.08);color:var(--gold);}
+.fac-numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:240px;margin:0 auto;}
+.fac-key{
+  padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.04);color:var(--white);
+  font-family:'DM Sans',sans-serif;font-size:18px;font-weight:500;
+  cursor:pointer;transition:all .15s;text-align:center;
+}
+.fac-key:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.15);}
+.fac-key.del{color:var(--cream-dim);font-size:14px;}
+.fac-key.empty{visibility:hidden;}
+.fac-wrong{font-size:12px;color:#E05050;margin-top:12px;display:none;}
+/* FAC DASHBOARD */
+.fac-dashboard{padding:0 20px;}
+.fac-stat-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+.fac-stat{
+  background:var(--navy-card);border:1px solid rgba(255,255,255,0.07);
+  border-radius:12px;padding:14px 16px;
+}
+.fac-stat-num{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:500;color:var(--gold);}
+.fac-stat-label{font-size:11px;color:var(--cream-dim);margin-top:2px;}
+.fac-section-title{font-size:12px;font-weight:600;letter-spacing:.1em;color:var(--cream-dim);text-transform:uppercase;margin-bottom:12px;}
+.agent-activity-card{
+  background:var(--navy-card);border:1px solid rgba(255,255,255,0.07);
+  border-radius:12px;padding:14px 16px;margin-bottom:10px;
+}
+.aac-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.aac-name{font-size:14px;font-weight:500;color:var(--white);}
+.aac-site{font-size:11px;color:var(--cream-dim);}
+.aac-badges{display:flex;gap:6px;}
+.aac-badge{font-size:10px;padding:2px 8px;border-radius:8px;}
+.badge-active{background:var(--green-light);color:#3DAA6A;}
+.badge-scenarios{background:rgba(196,164,74,0.12);color:var(--gold);}
+.badge-reflect{background:rgba(26,95,160,0.15);color:#4A9AE0;}
+.aac-commit{font-size:12px;color:var(--cream-dim);font-style:italic;line-height:1.5;}
+.cohort-gap-card{
+  background:rgba(184,114,10,0.06);border:1px solid rgba(184,114,10,0.2);
+  border-radius:12px;padding:14px 16px;margin-bottom:10px;
+}
+.cgc-label{font-size:10px;font-weight:600;letter-spacing:.1em;color:#D4920A;text-transform:uppercase;margin-bottom:6px;}
+.cgc-text{font-size:13px;color:var(--cream);line-height:1.6;}
+
+/* ===== TOAST ===== */
+#toast{
+  position:fixed;bottom:88px;left:50%;transform:translateX(-50%) translateY(40px);
+  background:var(--gold);color:var(--navy);padding:10px 22px;
+  border-radius:20px;font-size:13px;font-weight:500;
+  transition:transform .3s ease;z-index:200;white-space:nowrap;opacity:0;
+}
+#toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+/* ===== MODAL ===== */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:300;
+  display:none;align-items:flex-end;
+  backdrop-filter:blur(4px);
+}
+.modal-overlay.show{display:flex;animation:fadeIn .2s ease;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-sheet{
+  width:100%;max-height:80vh;background:var(--navy-mid);
+  border-radius:20px 20px 0 0;border-top:1px solid rgba(196,164,74,0.2);
+  padding:24px 24px max(24px, env(safe-area-inset-bottom));
+  overflow-y:auto;animation:slideUp .3s ease;
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-handle{width:36px;height:4px;background:rgba(255,255,255,0.2);border-radius:2px;margin:0 auto 20px;}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--white);margin-bottom:6px;}
+.modal-sub{font-size:12px;color:var(--cream-dim);margin-bottom:20px;line-height:1.6;}
+
+</style>
+</head>
+<body>
+<div id="starfield"></div>
+<div id="app">
+
+  <!-- ===== IDENTITY SCREEN ===== -->
+  <div class="screen active" id="screen-identity">
+    <div class="scroll-body" style="padding-bottom:40px;">
+      <div class="identity-inner">
+        <div class="aea-emblem"><div class="emblem-tri"></div></div>
+        <div class="identity-eyebrow">Cohort I · 2026</div>
+        <h1 class="identity-title">Apex<br><span>Excellence</span><br>Academy</h1>
+        <p class="identity-sub">Your personal leadership platform. Built for the shift. Designed for the long game.</p>
+        <div class="gold-rule"></div>
+        <div class="identity-cohort-badge"><div class="cohort-dot"></div>12-Week Program · Active</div>
+        <div style="width:100%;max-width:360px;">
+          <label class="field-label" for="id-name">Your name</label>
+          <input class="field-input" id="id-name" type="text" placeholder="First name" autocomplete="off" oninput="checkIdentity()">
+          <label class="field-label" for="id-site">Your site</label>
+          <select class="site-select" id="id-site" onchange="checkIdentity()">
+            <option value="">Select your property</option>
+            <option value="VIA">VIA</option>
+            <option value="Benjamin">Benjamin</option>
+            <option value="Ora">Ora</option>
+            <option value="Franklin">Franklin</option>
+            <option value="HVCC">HVCC</option>
+            <option value="Elevate">Elevate</option>
+          </select>
+          <button class="btn-gold" id="id-enter" disabled onclick="enterApp()">Enter the Academy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== HOME SCREEN ===== -->
+  <div class="screen" id="screen-home">
+    <div class="scroll-body">
+      <div class="home-header">
+        <div class="home-greeting-sm">Good to have you back</div>
+        <div class="home-greeting">Welcome, <span id="home-name">—</span></div>
+      </div>
+      <div class="home-week-strip" onclick="navTo('feed')">
+        <div class="week-strip-icon">📌</div>
+        <div>
+          <div class="week-strip-label">Now active</div>
+          <div class="week-strip-title" id="home-current-week">Week 5 · Vocal Presence</div>
+        </div>
+        <div class="week-strip-arrow">›</div>
+      </div>
+      <div class="commitment-preview" id="home-commit-preview">
+        <div class="cp-label">My Commitment</div>
+        <div class="cp-text" id="home-commit-text"><span class="cp-empty" onclick="navTo('commit')">Tap to set your Week 4 commitment →</span></div>
+      </div>
+      <div class="home-section-label">Quick Access</div>
+      <div class="quick-grid">
+        <div class="quick-card" onclick="navTo('scenario')">
+          <div class="qc-icon">🎯</div>
+          <div class="qc-title">Scenario Trainer</div>
+          <div class="qc-sub">Real shift situations. Sharp responses.</div>
+        </div>
+        <div class="quick-card" onclick="navTo('reflect')">
+          <div class="qc-icon">📓</div>
+          <div class="qc-title">Weekly Reflection</div>
+          <div class="qc-sub">Log your growth. Own the week.</div>
+          <div class="qc-badge" id="reflect-badge" style="display:none;">NEW</div>
+        </div>
+        <div class="quick-card" onclick="navTo('progress')">
+          <div class="qc-icon">🏆</div>
+          <div class="qc-title">My Progress</div>
+          <div class="qc-sub">6 dimensions. Your full profile.</div>
+        </div>
+        <div class="quick-card" onclick="navTo('feed')">
+          <div class="qc-icon">🔔</div>
+          <div class="qc-title">Week Feed</div>
+          <div class="qc-sub">Themes, challenges, focus areas.</div>
+        </div>
+      </div>
+      <div class="home-section-label">Activity Streak</div>
+      <div class="streak-bar">
+        <div class="streak-label">Weeks Engaged</div>
+        <div class="streak-dots" id="streak-dots"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== WEEK FEED ===== -->
+  <div class="screen" id="screen-feed">
+    <div class="scroll-body">
+      <div class="feed-header">
+        <div class="feed-title">Week Feed</div>
+        <div class="feed-sub">Your 12-week curriculum — every theme, every challenge.</div>
+      </div>
+      <div id="feed-cards"></div>
+    </div>
+  </div>
+
+  <!-- ===== SCENARIO TRAINER ===== -->
+  <div class="screen" id="screen-scenario">
+    <div class="scroll-body">
+      <div class="scenario-header">
+        <div class="scenario-title">Scenario Trainer</div>
+        <div class="scenario-sub">Real situations. Honest choices. Sharp feedback.</div>
+      </div>
+      <div class="scenario-card" id="scenario-card-wrap"></div>
+      <div class="sc-feedback" id="sc-feedback">
+        <div class="sc-feedback-label">Facilitator Read</div>
+        <div class="sc-feedback-text" id="sc-feedback-text"></div>
+      </div>
+      <button class="sc-next-btn" id="sc-next-btn" onclick="nextScenario()">Next Scenario →</button>
+      <div class="scenario-complete" id="scenario-complete">
+        <div class="sc-complete-icon">⭐</div>
+        <div class="sc-complete-title">Session Complete</div>
+        <div class="sc-score-display">
+          <div class="sc-score-item"><div class="sc-score-num" id="sc-best-count">0</div><div class="sc-score-label">Best Response</div></div>
+          <div class="sc-score-item"><div class="sc-score-num" id="sc-ok-count">0</div><div class="sc-score-label">Close Call</div></div>
+          <div class="sc-score-item"><div class="sc-score-num" id="sc-miss-count">0</div><div class="sc-score-label">Growth Area</div></div>
+        </div>
+        <div class="sc-complete-sub" id="sc-complete-sub"></div>
+        <button class="btn-outline-gold" onclick="resetScenarios()">Run Again</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== REFLECTION ===== -->
+  <div class="screen" id="screen-reflect">
+    <div class="scroll-body">
+      <div class="reflect-header">
+        <div class="reflect-title">Weekly Reflection</div>
+        <div class="reflect-sub">End of week. Your honest account.</div>
+      </div>
+      <div class="reflect-week-selector" id="reflect-week-sel"></div>
+      <div class="reflect-form" id="reflect-form"></div>
+      <div class="reflect-saved" id="reflect-saved">✓ Reflection saved. Khalif can see your entry.</div>
+    </div>
+  </div>
+
+  <!-- ===== PROGRESS ===== -->
+  <div class="screen" id="screen-progress">
+    <div class="scroll-body">
+      <div class="progress-header">
+        <div class="progress-title">My Progress</div>
+        <div class="progress-sub">Across all 6 leadership dimensions.</div>
+      </div>
+      <div class="overall-ring-wrap">
+        <div class="ring-svg">
+          <svg viewBox="0 0 140 140" width="140" height="140">
+            <circle cx="70" cy="70" r="58" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="10"/>
+            <circle cx="70" cy="70" r="58" fill="none" stroke="var(--gold)" stroke-width="10"
+              stroke-linecap="round" stroke-dasharray="364.4"
+              id="overall-ring" stroke-dashoffset="364.4"
+              style="transform:rotate(-90deg);transform-origin:70px 70px;transition:stroke-dashoffset 1.2s ease"/>
+          </svg>
+          <div class="ring-center" id="overall-pct-display">—</div>
+        </div>
+        <div class="overall-ring-label">Overall Leadership Score</div>
+      </div>
+      <div class="radar-container" style="margin-top:24px;">
+        <svg viewBox="0 0 260 260" id="progress-radar"></svg>
+      </div>
+      <div class="dim-progress-list" id="dim-progress-list"></div>
+    </div>
+  </div>
+
+  <!-- ===== COMMITMENT WALL ===== -->
+  <div class="screen" id="screen-commit">
+    <div class="scroll-body">
+      <div class="commit-header">
+        <div class="commit-title">My Commitment</div>
+        <div class="commit-sub">The one thing you're working on. Keep it visible.</div>
+      </div>
+      <div class="commit-card" id="commit-display-card" style="display:none;">
+        <div class="commit-card-label">Active Commitment</div>
+        <div class="commit-display" id="commit-display-text"></div>
+        <div class="commit-set-date" id="commit-set-date"></div>
+      </div>
+      <div class="commit-edit-area">
+        <div class="commit-edit-label">Set or update your commitment</div>
+        <textarea class="commit-textarea" id="commit-input" placeholder="I commit to..."></textarea>
+      </div>
+      <button class="commit-save-btn" onclick="saveCommitment()">Save Commitment</button>
+      <div class="commit-history" id="commit-history-wrap" style="display:none;">
+        <div class="commit-history-label">Previous Commitments</div>
+        <div id="commit-history-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FACILITATOR STATS ===== -->
+  <div class="screen" id="screen-fac">
+    <div class="scroll-body">
+      <div class="fac-header">
+        <div class="fac-title">Facilitator View</div>
+        <div class="fac-sub">Cohort activity & agent stats — Khalif only.</div>
+      </div>
+      <div class="fac-passcode" id="fac-lock">
+        <div class="fac-lock-icon">🔐</div>
+        <div class="fac-lock-title">Facilitator Access</div>
+        <div class="fac-lock-sub">Enter your 4-digit passcode to view cohort data.</div>
+        <div class="fac-pin-row">
+          <div class="fac-pin-dot" id="pin0">·</div>
+          <div class="fac-pin-dot" id="pin1">·</div>
+          <div class="fac-pin-dot" id="pin2">·</div>
+          <div class="fac-pin-dot" id="pin3">·</div>
+        </div>
+        <div class="fac-numpad">
+          <div class="fac-key" onclick="pinKey('1')">1</div>
+          <div class="fac-key" onclick="pinKey('2')">2</div>
+          <div class="fac-key" onclick="pinKey('3')">3</div>
+          <div class="fac-key" onclick="pinKey('4')">4</div>
+          <div class="fac-key" onclick="pinKey('5')">5</div>
+          <div class="fac-key" onclick="pinKey('6')">6</div>
+          <div class="fac-key" onclick="pinKey('7')">7</div>
+          <div class="fac-key" onclick="pinKey('8')">8</div>
+          <div class="fac-key" onclick="pinKey('9')">9</div>
+          <div class="fac-key empty"></div>
+          <div class="fac-key" onclick="pinKey('0')">0</div>
+          <div class="fac-key del" onclick="pinDel()">⌫</div>
+        </div>
+        <div class="fac-wrong" id="pin-wrong">Incorrect passcode. Try again.</div>
+      </div>
+      <div id="fac-dashboard" style="display:none;padding-bottom:20px;">
+        <div class="fac-dashboard">
+          <div class="fac-stat-row">
+            <div class="fac-stat"><div class="fac-stat-num" id="fac-active">0</div><div class="fac-stat-label">Active Agents</div></div>
+            <div class="fac-stat"><div class="fac-stat-num" id="fac-scenarios">0</div><div class="fac-stat-label">Scenarios Run</div></div>
+            <div class="fac-stat"><div class="fac-stat-num" id="fac-reflections">0</div><div class="fac-stat-label">Reflections Logged</div></div>
+            <div class="fac-stat"><div class="fac-stat-num" id="fac-commits">0</div><div class="fac-stat-label">Commitments Set</div></div>
+          </div>
+          <div class="fac-section-title" style="margin-bottom:12px;">Cohort Gap Signal</div>
+          <div class="cohort-gap-card">
+            <div class="cgc-label">⚠️ Dominant Pattern · Week 4</div>
+            <div class="cgc-text">Communication & Tone surfaced as the primary gap across 5 of 7 agents. Shared weakness: translating individual competence into vocal team presence. Week 5 content is calibrated to this.</div>
+          </div>
+          <div class="fac-section-title" style="margin-top:20px;margin-bottom:12px;">Agent Activity</div>
+          <div id="fac-agent-list"></div>
+          <div style="margin-top:20px;">
+            <button class="btn-outline-gold" onclick="exportCohortReport()">Export Cohort Report</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== BOTTOM NAV ===== -->
+  <nav id="bottom-nav" style="display:none;">
+    <div class="nav-item active" id="nav-home" onclick="navTo('home')">
+      <div class="nav-icon">🏠</div><div class="nav-label">Home</div>
+    </div>
+    <div class="nav-item" id="nav-feed" onclick="navTo('feed')">
+      <div class="nav-icon">📌</div><div class="nav-label">Feed</div>
+    </div>
+    <div class="nav-item" id="nav-scenario" onclick="navTo('scenario')">
+      <div class="nav-icon">🎯</div><div class="nav-label">Train</div>
+    </div>
+    <div class="nav-item" id="nav-reflect" onclick="navTo('reflect')">
+      <div class="nav-icon">📓</div><div class="nav-label">Reflect</div>
+    </div>
+    <div class="nav-item" id="nav-progress" onclick="navTo('progress')">
+      <div class="nav-icon">🏆</div><div class="nav-label">Progress</div>
+    </div>
+  </nav>
+
+</div>
+<div id="toast">Saved</div>
+
+<script>
+// ===== STAR FIELD =====
+(function(){
+  const c=document.getElementById('starfield');
+  for(let i=0;i<100;i++){
+    const s=document.createElement('div');s.className='star';
+    const sz=Math.random()<.7?1:2;
+    s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${2+Math.random()*4}s;--dl:${Math.random()*5}s;--op:${.15+Math.random()*.4}`;
+    c.appendChild(s);
+  }
+})();
+
+// ===== DATA LAYER =====
+const DIMS = [
+  {name:'Presence & Professionalism',short:'Presence',color:'#2A7A4A'},
+  {name:'Communication & Tone',short:'Comms',color:'#1A5FA0'},
+  {name:'Operational Discipline',short:'Ops',color:'#B8720A'},
+  {name:'Ownership & Problem-Solving',short:'Ownership',color:'#A32020'},
+  {name:'Delegation & Coaching',short:'Coaching',color:'#6B3AAA'},
+  {name:'Judgment & Decisions',short:'Judgment',color:'#185FA5'},
+];
+
+const WEEKS = [
+  {num:1,theme:'Presence & Professionalism',icon:'🎩',focus:'How you show up before you say a word. Uniform standard. Energy management. The shift-start ritual.',challenge:'For 5 consecutive shifts, be fully set — desk clean, log reviewed, building status known — before the first thing asks something of you.',status:'complete'},
+  {num:2,theme:'Communication & Tone',icon:'💬',focus:'Regulate first, then respond. Word choice, volume, and what your silence communicates. Translating competence into presence.',challenge:'Identify one interaction per shift where you redirect a conversation — log what you said and how it landed.',status:'complete'},
+  {num:3,theme:'Operational Discipline',icon:'📋',focus:'The invisible work. Shift logs, handoffs, follow-through. If it isn\'t documented, it didn\'t happen.',challenge:'End every shift this week with a complete log — detailed enough that anyone could pick up exactly where you left off.',status:'complete'},
+  {num:4,theme:'Pulse Check — 1:1s',icon:'🔍',focus:'Individual coaching conversations. No group content this week. This is your conversation with Khalif.',challenge:'Be honest in your 1:1. Come with one thing you\'re proud of and one thing you\'re working through.',status:'complete'},
+  {num:5,theme:'Vocal Presence',icon:'📢',focus:'Communicating with your team, not just to residents. Briefing up. Speaking first. Making your thinking audible.',challenge:'Each shift this week, say one thing out loud to your team that you would normally have kept to yourself.',status:'current'},
+  {num:6,theme:'Ownership & Problem-Solving',icon:'🔑',focus:'The shift from explaining to owning. Root cause before reaction. Your name on the outcome.',challenge:'When something goes wrong this week, write one sentence: what you\'ll do differently. No context. No explanation. Just the move.',status:'locked'},
+  {num:7,theme:'Delegation & Coaching',icon:'🤝',focus:'Stop fixing. Start developing. The question instead of the answer. Trusting someone else\'s outcome.',challenge:'Delegate one task this week that you\'d normally absorb. Let the outcome be theirs.',status:'locked'},
+  {num:8,theme:'Reading the Room',icon:'👁️',focus:'Environmental scanning. Anticipating before being asked. The concierge who knows before the resident does.',challenge:'At shift start each day, write 3 things you observe that haven\'t been said yet.',status:'locked'},
+  {num:9,theme:'Judgment & Decision-Making',icon:'⚖️',focus:'Prioritization sequence: Safety → Resident Experience → Team → Admin. Escalation thresholds. Owning the call.',challenge:'After every significant decision this week, write one sentence explaining your reasoning. Build the habit of knowing why.',status:'locked'},
+  {num:10,theme:'Integration — Putting It Together',icon:'🌐',focus:'All 6 dimensions active simultaneously. This is what leadership looks like at full capacity.',challenge:'Lead one full shift this week as if it were your evaluation. Log everything. Own everything.',status:'locked'},
+  {num:11,theme:'Evaluation Week I',icon:'⭐',focus:'Formal evaluation. Weeks 1–10 in action. Your facilitator is watching with intention.',challenge:'Show up as the version of yourself you\'ve been building toward. No performance — just application.',status:'locked'},
+  {num:12,theme:'Evaluation Week II + Completion',icon:'🏆',focus:'Final evaluation. Program completion. Recognition of growth across all dimensions.',challenge:'Finish strong. The last shift matters as much as the first.',status:'locked'},
+];
+
+const SCENARIOS = [
+  {
+    dim:0,dimName:'Presence & Professionalism',dimColor:'#2A7A4A',
+    situation:'A resident walks into the lobby 10 minutes after your shift started. You haven\'t fully reviewed the log yet. They immediately ask you about a maintenance issue that was supposed to be resolved yesterday.',
+    options:[
+      {letter:'A',quality:'best',text:'You pull up the log in real time while confidently telling the resident you\'re pulling the status right now. You have the answer within 45 seconds.'},
+      {letter:'B',quality:'ok',text:'You apologize, explain you just started your shift, and ask them to give you a minute to find the right person.'},
+      {letter:'C',quality:'miss',text:'You tell them you\'ll look into it and follow up — but you don\'t have a clear plan for when that happens.'},
+    ],
+    feedback:{
+      best:'That\'s the standard. Residents don\'t see your shift start — they see your response. Pulling the answer in real time while maintaining composure is exactly what Presence looks like under pressure.',
+      ok:'Honesty is fine. But "I just started" shifts the burden to the resident. The goal is to make the transition invisible to them.',
+      miss:'Following up without a defined timeline is how commitments disappear. The resident leaves uncertain. That\'s a gap in both presence and operational discipline.',
+    }
+  },
+  {
+    dim:1,dimName:'Communication & Tone',dimColor:'#1A5FA0',
+    situation:'A resident is visibly frustrated — their voice is rising, they\'re speaking over you, and they\'re using language that\'s edging toward disrespectful. Other residents are nearby.',
+    options:[
+      {letter:'A',quality:'best',text:'You lower your own volume, slow your pace, and say: "I\'m going to help you with this. Let\'s step over here." You move them, then address the issue with full attention.'},
+      {letter:'B',quality:'ok',text:'You stay calm but hold your ground where you are, explain the situation clearly, and answer their question directly despite the noise around you.'},
+      {letter:'C',quality:'miss',text:'You match their urgency — your voice rises slightly, you speak faster, and you try to resolve it quickly to end the discomfort.'},
+    ],
+    feedback:{
+      best:'This is elite. You de-escalated the environment, protected other residents from the friction, and kept control of the interaction without a single confrontational word. That\'s the full sequence.',
+      ok:'Staying calm is right. But public resolution of a rising situation keeps others in the energy. Moving to a quieter space is always the cleaner play when the room is watching.',
+      miss:'When you match their energy — even slightly — you\'ve handed them the controls. Tone sets tone. Yours needs to be the one that leads.',
+    }
+  },
+  {
+    dim:2,dimName:'Operational Discipline',dimColor:'#B8720A',
+    situation:'It\'s 15 minutes before your shift ends. Three things happened today that weren\'t in the log from the previous shift. You\'re tired and the incoming agent is already here.',
+    options:[
+      {letter:'A',quality:'best',text:'You spend 10 minutes logging all three items with enough detail that the incoming agent doesn\'t need to ask a follow-up question. You brief them verbally and confirm they\'ve seen it.'},
+      {letter:'B',quality:'ok',text:'You give the incoming agent a verbal rundown of everything and tell them you\'ll finish the log, but you end up leaving before completing it fully.'},
+      {letter:'C',quality:'miss',text:'The incoming agent is there, the handoff feels covered — you trust that verbal is enough and clock out.'},
+    ],
+    feedback:{
+      best:'This is what operational discipline looks like on a hard day. The log protects the building and the next shift. Tired doesn\'t change the standard.',
+      ok:'Verbal handoffs disappear. A partial log creates ambiguity. The intention was there — the execution wasn\'t complete.',
+      miss:'"They\'ll figure it out" is how things fall through. Verbal isn\'t documentation. If it\'s not written, the next person is operating without the full picture.',
+    }
+  },
+  {
+    dim:3,dimName:'Ownership & Problem-Solving',dimColor:'#A32020',
+    situation:'A resident complaint from two days ago — something you were looped in on — escalated while you were off. Your manager is now aware. It\'s your first shift back.',
+    options:[
+      {letter:'A',quality:'best',text:'You pull the full history before your manager says anything, identify where the handoff broke down, and come to your manager with: "Here\'s what happened, here\'s my role in it, and here\'s what I\'m doing differently."'},
+      {letter:'B',quality:'ok',text:'You wait for your manager to bring it up, then explain the full context of what happened and what you knew at the time.'},
+      {letter:'C',quality:'miss',text:'You acknowledge the situation when asked but emphasize that you weren\'t on shift when it escalated, so you weren\'t in a position to act.'},
+    ],
+    feedback:{
+      best:'Proactive ownership before you\'re asked — that\'s the mark of someone operating at a senior level. You controlled the narrative, showed accountability, and presented a path forward. That\'s how trust gets built.',
+      ok:'Waiting to be asked is passive ownership. The information was right — the posture wasn\'t. Come to the conversation instead of waiting for it to come to you.',
+      miss:'"I wasn\'t there" might be accurate. It\'s not ownership. Leaders are accountable to outcomes, not just the hours they were present for.',
+    }
+  },
+  {
+    dim:4,dimName:'Delegation & Coaching',dimColor:'#6B3AAA',
+    situation:'A newer team member handled a resident request incorrectly — not dangerously, but not to standard. You saw what happened.',
+    options:[
+      {letter:'A',quality:'best',text:'After the interaction ends, you pull them aside and ask: "Walk me through what happened there." You listen, then ask: "What would you do differently?" You let them get to the answer.'},
+      {letter:'B',quality:'ok',text:'You tell them what went wrong and show them the right way to handle it next time. Clear, direct, respectful.'},
+      {letter:'C',quality:'miss',text:'You step in while it\'s happening, smooth it over yourself, and handle the resident directly.'},
+    ],
+    feedback:{
+      best:'That\'s the coaching approach. Asking them to walk it back and find the answer themselves creates a lesson they own — not one you gave them. That sticks.',
+      ok:'Telling is training. Asking is coaching. The correction was right. The method was directive, not developmental. They know the answer — but you gave it to them.',
+      miss:'Taking over protects the moment but doesn\'t develop the person. They didn\'t learn — you just demonstrated that you\'ll step in when it gets hard.',
+    }
+  },
+  {
+    dim:5,dimName:'Judgment & Decisions',dimColor:'#185FA5',
+    situation:'Your shift has three things happening simultaneously: a resident lockout, a vendor arriving who needs escort, and a delivery that needs signature. You\'re the only one at the desk.',
+    options:[
+      {letter:'A',quality:'best',text:'Resident lockout first — safety and resident experience. You radio for support, sign for the delivery in 30 seconds while on radio, then escort the vendor immediately after the lockout is resolved.'},
+      {letter:'B',quality:'ok',text:'You sign for the delivery first because the driver is waiting, then handle the lockout, then the vendor.'},
+      {letter:'C',quality:'miss',text:'You try to handle all three at once, moving between them to keep everyone feeling attended to.'},
+    ],
+    feedback:{
+      best:'Correct prioritization sequence: Safety/Resident first. You also used available tools (radio) and stacked the small task inside the larger one. That\'s operational judgment under pressure.',
+      ok:'The delivery was the smallest priority of the three. Starting there inverted the sequence. The driver waits — the locked-out resident doesn\'t.',
+      miss:'Splitting attention across three live situations means none of them get your full competence. Prioritize, sequence, execute.',
+    }
+  },
+  {
+    dim:0,dimName:'Presence & Professionalism',dimColor:'#2A7A4A',
+    situation:'You\'re deep in a long shift — hour 9. You\'re tired. A resident you\'ve helped many times approaches with what feels like a minor, repetitive request.',
+    options:[
+      {letter:'A',quality:'best',text:'You greet them with the same energy as hour one. You handle the request fully. Your tone doesn\'t telegraph your fatigue.'},
+      {letter:'B',quality:'ok',text:'You handle the request competently but your responses are a little shorter. You get through it professionally.'},
+      {letter:'C',quality:'miss',text:'You\'re efficient — maybe a little clipped. The resident gets what they need, but the warmth isn\'t quite there.'},
+    ],
+    feedback:{
+      best:'The standard doesn\'t shift because you\'re tired. This resident has no idea it\'s hour 9 — and that\'s the goal. Consistency under fatigue is one of the hardest leadership skills to build.',
+      ok:'Shorter isn\'t wrong. But they noticed. Your words were right; your energy told a different story. The gap is small — and worth closing.',
+      miss:'"Efficient" is how we describe ourselves when we\'re not quite meeting the standard. Residents feel the warmth gap even when they don\'t name it.',
+    }
+  },
+  {
+    dim:1,dimName:'Communication & Tone',dimColor:'#1A5FA0',
+    situation:'A team member comes to you frustrated about something another team member did. They want you to validate their frustration. You can see both sides.',
+    options:[
+      {letter:'A',quality:'best',text:'You listen fully. Then: "I hear you. Here\'s what I\'d suggest." You redirect toward what they can control, and you don\'t add fuel to the situation.'},
+      {letter:'B',quality:'ok',text:'You listen and validate how they feel, but you stop short of offering a direction — you don\'t want to get in the middle of it.'},
+      {letter:'C',quality:'miss',text:'You agree with their take to keep the peace, and suggest they bring it to management.'},
+    ],
+    feedback:{
+      best:'You listened, held the space, and redirected toward action without taking sides. That\'s the communication a leader offers — not a peer, not a validator. A guide.',
+      ok:'Validation without direction leaves them where they started. They came to you because they respect you. Staying neutral is safe — it\'s not always leadership.',
+      miss:'Agreeing to keep the peace is a form of conflict avoidance. You\'ve now added your voice to the friction and escalated without resolution.',
+    }
+  },
+];
+
+// ===== STATE =====
+let state = {
+  name: '',
+  site: '',
+  currentScreen: 'identity',
+  currentWeek: 5,
+  commitment: '',
+  commitmentDate: '',
+  commitHistory: [],
+  reflections: {},
+  scenarioScores: {best:0, ok:0, miss:0},
+  scenarioIndex: 0,
+  weekStreaks: [],
+  dimScores: [72, 58, 65, 61, 54, 70], // pulled from self-assessment baseline
+  pinBuffer: '',
+  facUnlocked: false,
+  agentActivity: [
+    {name:'Jeffrey Pena',site:'VIA',scenarios:4,reflections:1,commit:'I commit to reviewing the shift log before I interact with my first resident each shift.',active:true},
+    {name:'Gautier Victor',site:'Ora',scenarios:2,reflections:0,commit:'',active:true},
+    {name:'Ken Kelly',site:'HVCC',scenarios:5,reflections:1,commit:'I commit to briefing my team at shift start rather than absorbing every task myself.',active:true},
+    {name:'Lilibet Arias',site:'Benjamin',scenarios:3,reflections:1,commit:'I commit to voicing when I\'m at capacity — before I\'m running on empty.',active:true},
+    {name:'Kieria Wagner-Bennett',site:'Elevate',scenarios:6,reflections:2,commit:'I commit to naming one thing my team does well each shift.',active:true},
+    {name:'Misael Gared',site:'Franklin',scenarios:4,reflections:1,commit:'I commit to logging every follow-up I make so nothing disappears.',active:true},
+    {name:'Akyalla Santiago',site:'VIA',scenarios:3,reflections:0,commit:'',active:true},
+  ]
+};
+
+// ===== LOAD/SAVE =====
+function save(){try{localStorage.setItem('aea_v1',JSON.stringify(state));}catch(e){}}
+function load(){
+  try{
+    const d=localStorage.getItem('aea_v1');
+    if(d){const p=JSON.parse(d);Object.assign(state,p);}
+  }catch(e){}
+}
+
+// ===== IDENTITY =====
+function checkIdentity(){
+  const n=document.getElementById('id-name').value.trim();
+  const s=document.getElementById('id-site').value;
+  document.getElementById('id-enter').disabled=n.length<2||!s;
+}
+function enterApp(){
+  state.name=document.getElementById('id-name').value.trim();
+  state.site=document.getElementById('id-site').value;
+  save();
+  document.getElementById('screen-identity').classList.remove('active');
+  document.getElementById('bottom-nav').style.display='flex';
+  navTo('home');
+  initStreak();
+  buildFeed();
+  buildReflect();
+  buildProgress();
+  buildCommit();
+  buildScenario();
+}
+
+// ===== NAV =====
+const SCREENS=['home','feed','scenario','reflect','progress','commit','fac'];
+function navTo(id){
+  SCREENS.forEach(s=>{
+    const sc=document.getElementById('screen-'+s);
+    if(sc)sc.classList.remove('active');
+  });
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const target=document.getElementById('screen-'+id);
+  if(target)target.classList.add('active');
+  const navEl=document.getElementById('nav-'+id);
+  if(navEl)navEl.classList.add('active');
+  state.currentScreen=id;
+  if(id==='home')refreshHome();
+  if(id==='progress')animateProgress();
+  if(id==='fac')buildFac();
+  window.scrollTo(0,0);
+}
+
+// ===== HOME =====
+function refreshHome(){
+  document.getElementById('home-name').textContent=state.name;
+  const wk=WEEKS.find(w=>w.status==='current')||WEEKS[4];
+  document.getElementById('home-current-week').textContent=`Week ${wk.num} · ${wk.theme}`;
+  const ct=document.getElementById('home-commit-text');
+  if(state.commitment){
+    ct.innerHTML=`<em>${state.commitment}</em>`;
+  } else {
+    ct.innerHTML=`<span class="cp-empty" onclick="navTo('commit')">Tap to set your commitment →</span>`;
+  }
+}
+
+// ===== STREAK =====
+function initStreak(){
+  const dots=document.getElementById('streak-dots');
+  dots.innerHTML='';
+  const labels=['W1','W2','W3','W4','W5','W6','W7','W8','W9','W10'];
+  labels.forEach((l,i)=>{
+    const d=document.createElement('div');
+    d.className='streak-dot';
+    if(i<4)d.className+=' done', d.textContent='✓';
+    else if(i===4)d.className+=' today', d.textContent=l;
+    else d.textContent=l;
+    dots.appendChild(d);
+  });
+}
+
+// ===== FEED =====
+function buildFeed(){
+  const wrap=document.getElementById('feed-cards');
+  wrap.innerHTML='';
+  WEEKS.forEach(w=>{
+    const div=document.createElement('div');
+    div.className='week-card';
+    if(w.status==='locked'){div.style.opacity='.6';}
+    const numClass=w.status==='current'?'current':w.status==='complete'?'past':'future';
+    const statusLabel=w.status==='current'?'Active Now':w.status==='complete'?'Complete':'Locked';
+    const statusCls=w.status==='current'?'status-active':w.status==='complete'?'status-complete':'status-locked';
+    div.innerHTML=`
+      <div class="week-card-header">
+        <div class="wch-left">
+          <div class="wch-num ${numClass}">${w.num}</div>
+          <div class="wch-info">
+            <div class="wch-week">Week ${w.num}</div>
+            <div class="wch-theme">${w.icon} ${w.theme}</div>
+          </div>
+        </div>
+        <div class="wch-status ${statusCls}">${statusLabel}</div>
+      </div>
+      ${w.status!=='locked'?`<div class="week-card-body">
+        <div class="wcb-focus">${w.focus}</div>
+        <div class="wcb-challenge"><div class="wcb-challenge-label">Your Challenge</div>${w.challenge}</div>
+      </div>`:''}
+    `;
+    wrap.appendChild(div);
+  });
+}
+
+// ===== SCENARIOS =====
+let scIdx=0, scAnswers=[];
+function buildScenario(){
+  scIdx=0; scAnswers=[];
+  renderScenario();
+}
+function renderScenario(){
+  const sc=SCENARIOS[scIdx];
+  document.getElementById('scenario-complete').style.display='none';
+  document.getElementById('scenario-complete').classList.remove('show');
+  const wrap=document.getElementById('scenario-card-wrap');
+  const opts=sc.options.map(o=>`
+    <div class="sc-opt" id="scopt-${o.letter}" onclick="selectScOpt('${o.letter}','${o.quality}')">
+      <div class="sc-opt-letter">${o.letter}</div>
+      <div class="sc-opt-text">${o.text}</div>
+    </div>`).join('');
+  wrap.innerHTML=`
+    <div class="sc-inner">
+      <div class="sc-top">
+        <div class="sc-dim-badge" style="background:${sc.dimColor}22;color:${sc.dimColor};border:1px solid ${sc.dimColor}44;">${sc.dimName}</div>
+        <div class="sc-situation-label">The Situation</div>
+        <div class="sc-situation">${sc.situation}</div>
+      </div>
+      <div class="sc-options">${opts}</div>
+    </div>
+  `;
+  document.getElementById('sc-feedback').classList.remove('show');
+  document.getElementById('sc-next-btn').classList.remove('show');
+}
+function selectScOpt(letter,quality){
+  if(document.getElementById('sc-feedback').classList.contains('show'))return;
+  const sc=SCENARIOS[scIdx];
+  const opts=sc.options;
+  opts.forEach(o=>{
+    const el=document.getElementById('scopt-'+o.letter);
+    if(o.quality==='best')el.className='sc-opt reveal-best';
+    else if(o.quality==='ok')el.className='sc-opt reveal-ok';
+    else el.className='sc-opt reveal-miss';
+  });
+  const chosen=document.getElementById('scopt-'+letter);
+  if(quality==='best')chosen.className='sc-opt selected-best';
+  else if(quality==='ok')chosen.className='sc-opt selected-ok';
+  else chosen.className='sc-opt selected-miss';
+
+  scAnswers.push(quality);
+  const fb=document.getElementById('sc-feedback');
+  document.getElementById('sc-feedback-text').textContent=sc.feedback[quality];
+  fb.classList.add('show');
+  const nextBtn=document.getElementById('sc-next-btn');
+  nextBtn.textContent=scIdx===SCENARIOS.length-1?'See My Results':'Next Scenario →';
+  nextBtn.classList.add('show');
+}
+function nextScenario(){
+  scIdx++;
+  if(scIdx>=SCENARIOS.length){
+    showScenarioComplete();
+    return;
+  }
+  renderScenario();
+  document.getElementById('scenario-card-wrap').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function showScenarioComplete(){
+  document.getElementById('scenario-card-wrap').innerHTML='';
+  document.getElementById('sc-feedback').classList.remove('show');
+  document.getElementById('sc-next-btn').classList.remove('show');
+  const best=scAnswers.filter(a=>a==='best').length;
+  const ok=scAnswers.filter(a=>a==='ok').length;
+  const miss=scAnswers.filter(a=>a==='miss').length;
+  document.getElementById('sc-best-count').textContent=best;
+  document.getElementById('sc-ok-count').textContent=ok;
+  document.getElementById('sc-miss-count').textContent=miss;
+  const msgs=[
+    'Every rep counts. Review the scenarios where you were in the growth zone — those are the ones that move the needle.',
+    'Solid session. You\'re developing the instinct. One more run and watch the pattern shift.',
+    'You\'re operating at standard in most situations. The close calls are where the next level lives.',
+    'That\'s the standard. Consistent, grounded, purposeful. Keep running these — the reps compound.'
+  ];
+  const idx=best>=6?3:best>=4?2:best>=2?1:0;
+  document.getElementById('sc-complete-sub').textContent=msgs[idx];
+  document.getElementById('scenario-complete').style.display='block';
+  document.getElementById('scenario-complete').classList.add('show');
+  state.scenarioScores.best+=best;state.scenarioScores.ok+=ok;state.scenarioScores.miss+=miss;
+  save();
+}
+function resetScenarios(){buildScenario();}
+
+// ===== REFLECTION =====
+const REFLECT_QS = {
+  1:['What did your presence look like this week? Be specific — what did you do differently?','Where did your standard slip? Name the moment.','What\'s one thing you\'ll carry into next week from this theme?'],
+  2:['Describe one moment where you regulated before responding. What happened?','When did pressure change your tone? What did you notice?','What\'s one phrase or approach you\'re committing to for communication?'],
+  3:['How complete were your shift logs this week? Honest answer.','What fell through the cracks — and what would have prevented it?','What does a \'complete handoff\' look like for you now?'],
+  4:['What did you take away from your 1:1 with Khalif?','What\'s the one thing you said in that conversation that surprised you?','What commitment did you leave with?'],
+  5:['Did you speak first this week — or wait to be asked?','What did you say out loud to your team that you would have kept to yourself before?','Where does your voice need to go next week?'],
+  6:['Describe a moment where you owned an outcome — not just a task.','When did you catch yourself explaining instead of owning?','What does ownership look like at 100% for you?'],
+  7:['Who did you develop this week, even in a small way?','What did you resist the urge to do yourself — and hand off instead?','What question did you ask instead of giving an answer?'],
+  8:['What did you notice this week that nobody asked you to notice?','How did your environmental scanning change the shift?','What are you watching for now that you weren\'t before?'],
+  9:['Describe a decision you made under pressure. What was your reasoning?','When did you escalate, and was the timing right?','What does your prioritization sequence feel like now — instinct or effort?'],
+  10:['This week is integration. Which dimension felt strongest?','Which one still costs you effort?','What does your leadership profile look like right now — in your own words?'],
+};
+function buildReflect(){
+  const sel=document.getElementById('reflect-week-sel');
+  sel.innerHTML='';
+  [1,2,3,4,5].forEach(w=>{
+    const chip=document.createElement('div');
+    chip.className='rws-chip'+(w===5?' active':'');
+    chip.textContent='Week '+w;
+    chip.onclick=()=>{
+      document.querySelectorAll('.rws-chip').forEach(c=>c.classList.remove('active'));
+      chip.classList.add('active');
+      renderReflectForm(w);
+    };
+    sel.appendChild(chip);
+  });
+  renderReflectForm(5);
+}
+function renderReflectForm(week){
+  const qs=REFLECT_QS[week]||REFLECT_QS[5];
+  const saved=state.reflections[week]||{};
+  const form=document.getElementById('reflect-form');
+  form.innerHTML='';
+  qs.forEach((q,i)=>{
+    const div=document.createElement('div');
+    div.className='reflect-q';
+    div.innerHTML=`
+      <div class="reflect-q-num">Reflection ${i+1}</div>
+      <div class="reflect-q-label">${q}</div>
+      <textarea class="reflect-textarea" id="rq-${week}-${i}" placeholder="Write honestly — this is for you.">${saved['q'+i]||''}</textarea>
+    `;
+    form.appendChild(div);
+  });
+  const ratingDiv=document.createElement('div');
+  ratingDiv.className='reflect-q';
+  ratingDiv.innerHTML=`
+    <div class="reflect-q-num">Self-Rating</div>
+    <div class="reflect-q-label">How would you rate your application of this week's theme overall?</div>
+    <div class="reflect-rating" id="rating-${week}">
+      ${[1,2,3,4,5].map(n=>`<div class="rating-dot${saved.rating===n?' selected':''}" onclick="selectRating(${week},${n})">${n}</div>`).join('')}
+    </div>
+  `;
+  form.appendChild(ratingDiv);
+  const submitDiv=document.createElement('div');
+  submitDiv.style.marginBottom='20px';
+  submitDiv.innerHTML=`<button class="reflect-submit" onclick="saveReflection(${week})">Save Reflection</button>`;
+  form.appendChild(submitDiv);
+  document.getElementById('reflect-saved').classList.remove('show');
+}
+let tempRatings={};
+function selectRating(week,n){
+  tempRatings[week]=n;
+  document.querySelectorAll(`#rating-${week} .rating-dot`).forEach((d,i)=>{
+    d.classList.toggle('selected',i+1===n);
+  });
+}
+function saveReflection(week){
+  const qs=REFLECT_QS[week]||REFLECT_QS[5];
+  const data={rating:tempRatings[week]||null};
+  qs.forEach((_,i)=>{
+    const el=document.getElementById(`rq-${week}-${i}`);
+    if(el)data['q'+i]=el.value;
+  });
+  state.reflections[week]=data;
+  save();
+  document.getElementById('reflect-saved').classList.add('show');
+  showToast('Reflection saved ✓');
+}
+
+// ===== PROGRESS =====
+function buildProgress(){
+  const list=document.getElementById('dim-progress-list');
+  list.innerHTML='';
+  DIMS.forEach((d,i)=>{
+    const pct=state.dimScores[i]||0;
+    const div=document.createElement('div');
+    div.className='dim-prog-item';
+    div.innerHTML=`
+      <div class="dpi-top">
+        <div class="dpi-name"><div class="dpi-dot" style="background:${d.color}"></div>${d.name}</div>
+        <div class="dpi-pct">${pct}%</div>
+      </div>
+      <div class="dpi-bar-wrap"><div class="dpi-bar" id="dpb-${i}" style="width:0%;background:${d.color}"></div></div>
+    `;
+    list.appendChild(div);
+  });
+}
+function animateProgress(){
+  const overall=Math.round(state.dimScores.reduce((a,b)=>a+b,0)/state.dimScores.length);
+  const ring=document.getElementById('overall-ring');
+  const circ=364.4;
+  setTimeout(()=>{
+    ring.style.strokeDashoffset=circ-(circ*overall/100);
+  },200);
+  let n=0;
+  const timer=setInterval(()=>{n=Math.min(n+2,overall);document.getElementById('overall-pct-display').textContent=n+'%';if(n>=overall)clearInterval(timer);},20);
+  setTimeout(()=>{
+    state.dimScores.forEach((_,i)=>{
+      const bar=document.getElementById('dpb-'+i);
+      if(bar)bar.style.width=state.dimScores[i]+'%';
+    });
+  },300);
+  drawProgressRadar();
+}
+function drawProgressRadar(){
+  const svg=document.getElementById('progress-radar');
+  if(!svg)return;
+  const cx=130,cy=130,r=88,n=6;
+  const angles=Array.from({length:n},(_,i)=>(i/n)*Math.PI*2-Math.PI/2);
+  let html='';
+  [.25,.5,.75,1].forEach(f=>{
+    const pts=angles.map(a=>[cx+r*f*Math.cos(a),cy+r*f*Math.sin(a)]);
+    html+=`<polygon points="${pts.map(p=>p.join(',')).join(' ')}" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>`;
+  });
+  angles.forEach(a=>{
+    html+=`<line x1="${cx}" y1="${cy}" x2="${cx+r*Math.cos(a)}" y2="${cy+r*Math.sin(a)}" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>`;
+  });
+  const dataPts=angles.map((a,i)=>[cx+(state.dimScores[i]/100)*r*Math.cos(a),cy+(state.dimScores[i]/100)*r*Math.sin(a)]);
+  html+=`<polygon points="${dataPts.map(p=>p.join(',')).join(' ')}" fill="rgba(196,164,74,0.12)" stroke="var(--gold)" stroke-width="1.5"/>`;
+  dataPts.forEach((p,i)=>{
+    html+=`<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="${DIMS[i].color}" stroke="var(--navy)" stroke-width="1.5"/>`;
+  });
+  const labelR=r+20;
+  const labels=['Presence','Comms','Ops','Ownership','Coaching','Judgment'];
+  angles.forEach((a,i)=>{
+    const x=cx+labelR*Math.cos(a),y=cy+labelR*Math.sin(a);
+    const anchor=x<cx-5?'end':x>cx+5?'start':'middle';
+    html+=`<text x="${x}" y="${y+4}" text-anchor="${anchor}" font-size="9" font-family="DM Sans,sans-serif" fill="rgba(255,255,255,0.45)">${labels[i]}</text>`;
+  });
+  svg.innerHTML=html;
+}
+
+// ===== COMMITMENT =====
+function buildCommit(){
+  renderCommitView();
+  const histWrap=document.getElementById('commit-history-wrap');
+  const histList=document.getElementById('commit-history-list');
+  if(state.commitHistory.length>0){
+    histWrap.style.display='block';
+    histList.innerHTML=state.commitHistory.map(h=>`
+      <div class="commit-log-item">
+        <div class="cli-date">${h.date}</div>
+        <div class="cli-text">${h.text}</div>
+      </div>
+    `).join('');
+  }
+}
+function renderCommitView(){
+  const card=document.getElementById('commit-display-card');
+  const display=document.getElementById('commit-display-text');
+  const dateEl=document.getElementById('commit-set-date');
+  if(state.commitment){
+    card.style.display='block';
+    display.textContent=state.commitment;
+    dateEl.textContent='Set '+state.commitmentDate;
+  } else {
+    card.style.display='none';
+  }
+}
+function saveCommitment(){
+  const val=document.getElementById('commit-input').value.trim();
+  if(!val)return;
+  if(state.commitment){
+    state.commitHistory.unshift({text:state.commitment,date:state.commitmentDate});
+  }
+  state.commitment=val;
+  state.commitmentDate=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  document.getElementById('commit-input').value='';
+  save();
+  buildCommit();
+  showToast('Commitment saved ✓');
+}
+
+// ===== FACILITATOR =====
+const FAC_PIN='1234'; // Change this to Khalif's actual code
+let pinBuffer='';
+function pinKey(k){
+  if(pinBuffer.length>=4)return;
+  pinBuffer+=k;
+  updatePinDisplay();
+  if(pinBuffer.length===4){
+    setTimeout(()=>{
+      if(pinBuffer===FAC_PIN){
+        state.facUnlocked=true;
+        document.getElementById('fac-lock').style.display='none';
+        document.getElementById('fac-dashboard').style.display='block';
+        renderFacDashboard();
+      } else {
+        document.getElementById('pin-wrong').style.display='block';
+        pinBuffer='';
+        updatePinDisplay();
+        setTimeout(()=>document.getElementById('pin-wrong').style.display='none',2000);
+      }
+    },200);
+  }
+}
+function pinDel(){
+  pinBuffer=pinBuffer.slice(0,-1);
+  updatePinDisplay();
+}
+function updatePinDisplay(){
+  for(let i=0;i<4;i++){
+    const d=document.getElementById('pin'+i);
+    if(i<pinBuffer.length){d.textContent='●';d.classList.add('filled');}
+    else{d.textContent='·';d.classList.remove('filled');}
+  }
+}
+function buildFac(){
+  if(state.facUnlocked){
+    document.getElementById('fac-lock').style.display='none';
+    document.getElementById('fac-dashboard').style.display='block';
+    renderFacDashboard();
+  }
+}
+function renderFacDashboard(){
+  const agents=state.agentActivity;
+  document.getElementById('fac-active').textContent=agents.filter(a=>a.active).length;
+  document.getElementById('fac-scenarios').textContent=agents.reduce((s,a)=>s+a.scenarios,0);
+  document.getElementById('fac-reflections').textContent=agents.reduce((s,a)=>s+a.reflections,0);
+  document.getElementById('fac-commits').textContent=agents.filter(a=>a.commit).length;
+  const list=document.getElementById('fac-agent-list');
+  list.innerHTML=agents.map(a=>`
+    <div class="agent-activity-card">
+      <div class="aac-top">
+        <div><div class="aac-name">${a.name}</div><div class="aac-site">${a.site}</div></div>
+        <div class="aac-badges">
+          ${a.active?'<span class="aac-badge badge-active">Active</span>':''}
+          ${a.scenarios>0?`<span class="aac-badge badge-scenarios">${a.scenarios} scenarios</span>`:''}
+          ${a.reflections>0?`<span class="aac-badge badge-reflect">${a.reflections} reflections</span>`:''}
+        </div>
+      </div>
+      ${a.commit?`<div class="aac-commit">"${a.commit}"</div>`:'<div class="aac-commit" style="opacity:.5;">No commitment set yet.</div>'}
+    </div>
+  `).join('');
+}
+function exportCohortReport(){
+  const agents=state.agentActivity;
+  let report=`APEX EXCELLENCE ACADEMY — COHORT I\nFacilitator Report · Week 5\nGenerated: ${new Date().toLocaleDateString()}\n\n`;
+  report+=`COHORT OVERVIEW\n`;
+  report+=`Active Agents: ${agents.filter(a=>a.active).length}/7\n`;
+  report+=`Total Scenarios Run: ${agents.reduce((s,a)=>s+a.scenarios,0)}\n`;
+  report+=`Total Reflections Logged: ${agents.reduce((s,a)=>s+a.reflections,0)}\n`;
+  report+=`Commitments Set: ${agents.filter(a=>a.commit).length}/7\n\n`;
+  report+=`COHORT GAP SIGNAL\nCommunication & Tone surfaced as the primary development area across 5 of 7 agents.\nShared gap: translating individual competence into vocal team presence.\n\n`;
+  report+=`AGENT ACTIVITY\n${'-'.repeat(40)}\n`;
+  agents.forEach(a=>{
+    report+=`\n${a.name} · ${a.site}\n`;
+    report+=`  Scenarios: ${a.scenarios} | Reflections: ${a.reflections}\n`;
+    report+=`  Commitment: ${a.commit||'Not set'}\n`;
+  });
+  try{
+    navigator.clipboard.writeText(report).then(()=>showToast('Report copied ✓'));
+  }catch(e){showToast('Report ready — copy from console');}
+}
+
+// ===== TOAST =====
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// ===== INIT =====
+load();
+if(state.name&&state.site){
+  document.getElementById('screen-identity').classList.remove('active');
+  document.getElementById('bottom-nav').style.display='flex';
+  navTo('home');
+  initStreak();
+  buildFeed();
+  buildReflect();
+  buildProgress();
+  buildCommit();
+  buildScenario();
+}
+</script>
+</body>
+</html>
