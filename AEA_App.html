@@ -512,6 +512,18 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 .fac-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
 .aac-meta{font-size:11px;color:var(--cream-dim);margin-top:6px;line-height:1.5}
 .streak-dot.missed{opacity:.35}
+.staff-row{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+.staff-btn{background:transparent;border:1px solid rgba(196,164,74,0.35);color:var(--gold);border-radius:999px;padding:9px 16px;font:500 12px 'DM Sans',sans-serif;letter-spacing:.06em;cursor:pointer}
+.staff-btn:hover{border-color:var(--gold);background:rgba(196,164,74,0.08)}
+.home-staff{margin:28px 20px 10px}
+.staff-back{background:none;border:0;color:var(--gold);font:500 13px 'DM Sans',sans-serif;padding:0 0 14px;cursor:pointer}
+.adm-card{border:1px solid rgba(196,164,74,0.22);border-radius:14px;padding:16px;margin-bottom:16px;background:rgba(255,255,255,0.02)}
+.adm-h{font-family:'Cormorant Garamond',serif;font-size:21px;color:var(--white);margin-bottom:10px}
+.adm-l{display:block;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin:10px 0 6px}
+.adm-card .field-input,.adm-card .site-select{margin-bottom:8px}
+.adm-hint{font-size:11.5px;color:var(--cream-dim);line-height:1.5;margin-top:6px}
+.adm-btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.adm-btns .btn-gold,.adm-btns .btn-outline-gold{width:auto;flex:1 1 160px;margin:0}
 </style>
 </head>
 <body>
@@ -535,6 +547,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <label class="field-label" for="id-site">Your site</label>
           <select class="site-select" id="id-site" onchange="checkIdentity()"><option value="">Select your property</option></select>
           <button class="btn-gold" id="id-enter" disabled onclick="enterApp()">Enter the Academy</button>
+          <div class="staff-row">
+            <button class="staff-btn" onclick="openLogin('fac')">Facilitator login</button>
+            <button class="staff-btn" onclick="openLogin('admin')">Admin login</button>
+          </div>
         </div>
       </div>
     </div>
@@ -587,6 +603,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
       <div class="streak-bar">
         <div class="streak-label">Weeks Engaged</div>
         <div class="streak-dots" id="streak-dots"></div>
+      </div>
+      <div class="staff-row home-staff">
+        <button class="staff-btn" onclick="openLogin('fac')">Facilitator login</button>
+        <button class="staff-btn" onclick="openLogin('admin')">Admin login</button>
       </div>
     </div>
   </div>
@@ -677,7 +697,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
         <div class="send-sub">Creates one progress file with your reflections, commitment, scenario results and self-assessment. Share it by text, email or Teams.</div>
         <button class="btn-gold" onclick="sendToFacilitator()">Send to Facilitator</button>
       </div>
-      <div class="fac-link" onclick="navTo('fac')">Facilitator</div>
+      <div class="fac-link" onclick="openLogin('fac')">Facilitator login</div>
     </div>
   </div>
 
@@ -709,13 +729,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
   <div class="screen" id="screen-fac">
     <div class="scroll-body">
       <div class="fac-header">
-        <div class="fac-title">Facilitator View</div>
-        <div class="fac-sub">Load your agents' progress files to see the cohort. Nothing leaves this computer.</div>
+        <button class="staff-back" onclick="exitStaff()">← Back</button>
+        <div class="fac-title" id="staff-title">Facilitator View</div>
+        <div class="fac-sub" id="staff-sub">Load your agents' progress files to see the cohort. Nothing leaves this computer.</div>
       </div>
       <div class="fac-passcode" id="fac-lock">
         <div class="fac-lock-icon">🔐</div>
-        <div class="fac-lock-title">Facilitator Access</div>
-        <div class="fac-lock-sub">Enter your 4-digit passcode to view cohort data.</div>
+        <div class="fac-lock-title" id="lock-title">Facilitator Login</div>
+        <div class="fac-lock-sub" id="lock-sub">Enter your 4-digit passcode.</div>
         <div class="fac-pin-row">
           <div class="fac-pin-dot" id="pin0">·</div>
           <div class="fac-pin-dot" id="pin1">·</div>
@@ -737,6 +758,41 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="fac-key del" onclick="pinDel()">⌫</div>
         </div>
         <div class="fac-wrong" id="pin-wrong">Incorrect passcode. Try again.</div>
+      </div>
+      <div id="admin-panel" style="display:none;padding-bottom:24px;">
+        <div class="fac-dashboard">
+          <div class="adm-card">
+            <div class="adm-h">Cohort settings</div>
+            <label class="adm-l" for="adm-cohort">Cohort name</label>
+            <input class="field-input" id="adm-cohort" type="text" placeholder="Cohort II">
+            <label class="adm-l" for="adm-start">Week 1 starts (Monday)</label>
+            <input class="field-input" id="adm-start" type="date">
+            <div class="adm-hint">Leave the date blank and agents pick their week in the Feed.</div>
+            <div class="adm-btns">
+              <button class="btn-gold" onclick="adminSaveProgram()">Save</button>
+              <button class="btn-outline-gold" onclick="adminCopyInvite()">Copy agent invite link</button>
+            </div>
+            <div class="adm-hint" id="adm-invite-note">Send the invite link to agents. Opening it puts these settings on their phone.</div>
+          </div>
+          <div class="adm-card">
+            <div class="adm-h">Passcodes</div>
+            <label class="adm-l" for="adm-pin-role">Change the passcode for</label>
+            <select class="site-select" id="adm-pin-role"><option value="fac">Facilitator login</option><option value="admin">Admin login</option></select>
+            <input class="field-input" id="adm-pin1" type="password" inputmode="numeric" maxlength="4" placeholder="New 4-digit passcode">
+            <input class="field-input" id="adm-pin2" type="password" inputmode="numeric" maxlength="4" placeholder="Type it again">
+            <div class="adm-btns"><button class="btn-outline-gold" onclick="adminSetPin()">Update passcode</button></div>
+            <div class="adm-hint">Passcodes are saved on this device. Change them on each computer or tablet you use.</div>
+          </div>
+          <div class="adm-card">
+            <div class="adm-h">This device</div>
+            <div class="adm-hint" id="adm-device-note" style="margin-top:0"></div>
+            <div class="adm-btns">
+              <button class="btn-outline-gold" onclick="adminSignOutAgent()">Sign out agent</button>
+              <button class="btn-outline-gold" onclick="openLogin('fac')">Open Facilitator View</button>
+            </div>
+            <div class="adm-hint">Signing out removes that agent's app data from this device. Use it on shared tablets. Send their progress file first.</div>
+          </div>
+        </div>
       </div>
       <div id="fac-dashboard" style="display:none;padding-bottom:20px;">
         <div class="fac-dashboard">
@@ -806,6 +862,21 @@ const PROGRAM = {
   cohort: 'Cohort II',
   start: ''   // Monday of Week 1 as 'YYYY-MM-DD'. Blank = agents pick their week in the Feed.
 };
+const PROGRAM_DEFAULTS = Object.assign({}, PROGRAM);
+const PROG_KEY = 'aea_program_v1';
+(function applyProgram(){
+  try{
+    const q=new URLSearchParams(location.search), saved=JSON.parse(localStorage.getItem(PROG_KEY)||'null')||{};
+    if(q.has('cohort')||q.has('start')){
+      if(q.has('cohort'))saved.cohort=q.get('cohort').slice(0,40);
+      if(q.has('start'))saved.start=/^\d{4}-\d{2}-\d{2}$/.test(q.get('start'))?q.get('start'):'';
+      localStorage.setItem(PROG_KEY,JSON.stringify(saved));
+      history.replaceState(null,'',location.pathname);
+    }
+    if(saved.cohort)PROGRAM.cohort=saved.cohort;
+    if('start' in saved)PROGRAM.start=saved.start||'';
+  }catch(e){}
+})();
 // Site codes match the Ops Command Center (cc_td.js).
 const SITES = [['Benjamin','The Benjamin Seaport'],['VIA','VIA Seaport'],['Ora','Ora Seaport'],['ANS','Avalon North Station'],['ANP','AVA North Point'],['Portfolio','Float / multi-site']];
 const SA_KEY = 'aea_selfassess_v1';
@@ -1021,6 +1092,7 @@ function navTo(id){
   if(id==='home')refreshHome();
   if(id==='progress')animateProgress();
   if(id==='fac')buildFac();
+  if(id!=='fac'&&state.name&&state.site)document.getElementById('bottom-nav').style.display='flex';
   window.scrollTo(0,0);
 }
 
@@ -1412,20 +1484,50 @@ function saveCommitment(){
 }
 
 // ===== FACILITATOR =====
-const FAC_PIN='1234'; // Facilitator passcode. The view only shows files you load on your own computer.
-let pinBuffer='';
+// ----- staff logins (Facilitator / Admin) -----
+// Default passcodes: Facilitator 1234, Admin 2026. Change them in Admin › Passcodes (saved on this device).
+// These keep agents out of staff screens; they are not account security. No cohort data lives in the app.
+const PIN_DEFAULTS={fac:'1234',admin:'2026'};
+const PIN_KEY='aea_pins_v1';
+function pinHash(p){let h=5381;const t='aea:'+p;for(let i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))>>>0;return h.toString(36);}
+function pinOk(role,p){try{const m=JSON.parse(localStorage.getItem(PIN_KEY)||'{}');if(m[role])return m[role]===pinHash(p);}catch(e){}return p===PIN_DEFAULTS[role];}
+let pinBuffer='', loginRole='fac', staffOpen={fac:false,admin:false};
+function openLogin(role){
+  loginRole=role; pinBuffer=''; updatePinDisplay();
+  document.getElementById('screen-identity').classList.remove('active');
+  document.getElementById('bottom-nav').style.display='none';
+  navTo('fac');
+  const fac=role==='fac';
+  document.getElementById('staff-title').textContent=fac?'Facilitator View':'Admin';
+  document.getElementById('staff-sub').textContent=fac?"Load your agents' progress files to see the cohort. Nothing leaves this computer.":'Cohort settings, passcodes and this device.';
+  document.getElementById('lock-title').textContent=fac?'Facilitator Login':'Admin Login';
+  document.getElementById('fac-dashboard').style.display='none';
+  document.getElementById('admin-panel').style.display='none';
+  if(staffOpen[role]){showStaff(role);return;}
+  document.getElementById('fac-lock').style.display='block';
+}
+function showStaff(role){
+  staffOpen[role]=true;
+  document.getElementById('fac-lock').style.display='none';
+  if(role==='fac'){document.getElementById('fac-dashboard').style.display='block';renderFacDashboard();}
+  else{document.getElementById('admin-panel').style.display='block';renderAdmin();}
+}
+function exitStaff(){
+  staffOpen={fac:false,admin:false}; pinBuffer=''; updatePinDisplay();
+  document.getElementById('fac-dashboard').style.display='none';
+  document.getElementById('admin-panel').style.display='none';
+  document.getElementById('fac-lock').style.display='block';
+  if(state.name&&state.site){document.getElementById('bottom-nav').style.display='flex';navTo('home');}
+  else{document.getElementById('screen-fac').classList.remove('active');document.getElementById('screen-identity').classList.add('active');window.scrollTo(0,0);}
+}
 function pinKey(k){
   if(pinBuffer.length>=4)return;
   pinBuffer+=k;
   updatePinDisplay();
   if(pinBuffer.length===4){
     setTimeout(()=>{
-      if(pinBuffer===FAC_PIN){
-        state.facUnlocked=true;
-        document.getElementById('fac-lock').style.display='none';
-        document.getElementById('fac-dashboard').style.display='block';
-        renderFacDashboard();
-      } else {
+      if(pinOk(loginRole,pinBuffer)){pinBuffer='';updatePinDisplay();showStaff(loginRole);}
+      else {
         document.getElementById('pin-wrong').style.display='block';
         pinBuffer='';
         updatePinDisplay();
@@ -1441,16 +1543,52 @@ function pinDel(){
 function updatePinDisplay(){
   for(let i=0;i<4;i++){
     const d=document.getElementById('pin'+i);
+    if(!d)continue;
     if(i<pinBuffer.length){d.textContent='●';d.classList.add('filled');}
     else{d.textContent='·';d.classList.remove('filled');}
   }
 }
-function buildFac(){
-  if(state.facUnlocked){
-    document.getElementById('fac-lock').style.display='none';
-    document.getElementById('fac-dashboard').style.display='block';
-    renderFacDashboard();
-  }
+document.addEventListener('keydown',e=>{
+  const lock=document.getElementById('fac-lock');
+  if(!document.getElementById('screen-fac').classList.contains('active')||!lock||lock.style.display==='none')return;
+  if(/^[0-9]$/.test(e.key))pinKey(e.key); else if(e.key==='Backspace')pinDel(); else if(e.key==='Escape')exitStaff();
+});
+function buildFac(){}
+// ----- admin -----
+function renderAdmin(){
+  document.getElementById('adm-cohort').value=PROGRAM.cohort||'';
+  document.getElementById('adm-start').value=PROGRAM.start||'';
+  document.getElementById('adm-device-note').textContent=state.name?('Signed in on this device: '+state.name+' · '+siteName(state.site)+'.'):'No agent is signed in on this device.';
+}
+function adminSaveProgram(){
+  const c=document.getElementById('adm-cohort').value.trim()||PROGRAM_DEFAULTS.cohort, st=document.getElementById('adm-start').value||'';
+  PROGRAM.cohort=c; PROGRAM.start=st;
+  try{localStorage.setItem(PROG_KEY,JSON.stringify({cohort:c,start:st}));}catch(e){}
+  setupIdentity(); applyWeekStatus(); if(state.name){buildFeed();buildReflect();initStreak();refreshHome();}
+  showToast('Saved on this device');
+}
+function inviteLink(){
+  const c=document.getElementById('adm-cohort').value.trim()||PROGRAM.cohort, st=document.getElementById('adm-start').value||'';
+  return location.origin+location.pathname+'?cohort='+encodeURIComponent(c)+'&start='+encodeURIComponent(st);
+}
+function adminCopyInvite(){
+  const link=inviteLink();
+  document.getElementById('adm-invite-note').textContent=link;
+  try{navigator.clipboard.writeText(link).then(()=>showToast('Invite link copied ✓'),()=>showToast('Copy the link shown below'));}catch(e){showToast('Copy the link shown below');}
+}
+function adminSetPin(){
+  const role=document.getElementById('adm-pin-role').value, a=document.getElementById('adm-pin1').value, b=document.getElementById('adm-pin2').value;
+  if(!/^\d{4}$/.test(a)){showToast('Use exactly 4 digits');return;}
+  if(a!==b){showToast('The two entries don\'t match');return;}
+  try{const m=JSON.parse(localStorage.getItem(PIN_KEY)||'{}');m[role]=pinHash(a);localStorage.setItem(PIN_KEY,JSON.stringify(m));}catch(e){showToast('Could not save on this device');return;}
+  document.getElementById('adm-pin1').value='';document.getElementById('adm-pin2').value='';
+  showToast((role==='fac'?'Facilitator':'Admin')+' passcode updated');
+}
+function adminSignOutAgent(){
+  if(!state.name){showToast('No agent signed in');return;}
+  if(!confirm('Remove '+state.name+"'s app data from this device? Send their progress file first."))return;
+  try{localStorage.removeItem('aea_v1');localStorage.removeItem(SA_KEY);}catch(e){}
+  location.reload();
 }
 // ----- agent: build and share a progress file (same naming style as the NHE packet) -----
 function progressFile(){
