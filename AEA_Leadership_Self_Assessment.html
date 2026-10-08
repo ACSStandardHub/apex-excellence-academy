@@ -296,7 +296,7 @@
     <div class="results">
       <div class="results-header">
         <div class="results-name" id="results-name"></div>
-        <div class="results-title">Your Leadership Profile · Week 4 Baseline</div>
+        <div class="results-title">Your Leadership Profile · Baseline</div>
         <div class="results-gold-rule"></div>
         <div class="results-summary" id="results-summary"></div>
       </div>
@@ -328,6 +328,7 @@
 
       <button class="btn-share" onclick="copyResults()">Copy results to share with facilitator</button>
       <button class="btn-restart" onclick="restart()">Retake assessment</button>
+      <a href="AEA_App.html" class="btn-restart" style="display:block;text-align:center;text-decoration:none;margin-top:10px;box-sizing:border-box">Back to the Academy app →</a>
     </div>
   </div>
 
@@ -342,7 +343,7 @@ const DIMS = [
   { name: 'Operational Discipline',     short: 'Ops',      color: '#B8720A', idx: 2 },
   { name: 'Ownership & Problem-Solving',short: 'Ownership',color: '#A32020', idx: 3 },
   { name: 'Delegation & Coaching',      short: 'Coaching', color: '#6B3AAA', idx: 4 },
-  { name: 'Judgment & Decisions',       short: 'Judgment', color: '#185FA5', idx: 5 },
+  { name: 'Judgment & Decision-Making', short: 'Judgment', color: '#185FA5', idx: 5 },
 ];
 
 const QUESTIONS = [
@@ -559,7 +560,7 @@ function showResults() {
 
   document.getElementById('results-name').textContent = agentName;
 
-  const summaries = ['Keep building — your baseline is set. The next 8 weeks will show you how far you can go.','Solid foundation. Real awareness. This is where growth starts.','Strong in key areas, developing in others. That\'s exactly where you should be at Week 4.'];
+  const summaries = ['Keep building — your baseline is set. The weeks ahead will show you how far you can go.','Solid foundation. Real awareness. This is where growth starts.','Strong in key areas, developing in others. That\'s exactly where you should be at this stage.'];
   document.getElementById('results-summary').textContent = overall>=75?summaries[2]:overall>=55?summaries[1]:summaries[0];
 
   setTimeout(()=>{
@@ -571,6 +572,8 @@ function showResults() {
   },300);
 
   drawRadar(dimScores);
+  // Save on this device so the Academy app's Progress screen and progress file can use it.
+  try{ localStorage.setItem('aea_selfassess_v1', JSON.stringify({name:agentName, date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}), savedAt:new Date().toISOString(), scores:dimScores.map(v=>Math.round(v)), dims:DIMS.map(d=>d.name)})); }catch(e){}
 
   const dimWrap = document.getElementById('dim-results');
   dimWrap.innerHTML = '';
@@ -644,7 +647,7 @@ function drawRadar(scores) {
 function copyResults() {
   const dimScores = getDimScores();
   const commitment = document.getElementById('commitment-text').value.trim();
-  let text = `AEA Leadership Self-Assessment — Week 4 Baseline\n`;
+  let text = `AEA Leadership Self-Assessment — Baseline\n`;
   text += `Agent: ${agentName}\n`;
   text += `Date: ${new Date().toLocaleDateString()}\n\n`;
   DIMS.forEach((d,i)=>{

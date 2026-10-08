@@ -490,6 +490,28 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 .modal-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--white);margin-bottom:6px;}
 .modal-sub{font-size:12px;color:var(--cream-dim);margin-bottom:20px;line-height:1.6;}
 
+/* ===== 2026-10 update ===== */
+.id-hint{font-size:11px;color:var(--cream-dim);margin:-6px 0 14px;line-height:1.45}
+.week-pick{margin-top:14px;background:rgba(196,164,74,0.06);border:1px solid rgba(196,164,74,0.25);border-radius:10px;padding:12px 14px}
+.week-pick label{display:block;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.week-pick select{width:100%;background:rgba(255,255,255,0.05);color:var(--white);border:1px solid rgba(196,164,74,0.3);border-radius:8px;padding:9px 10px;font:inherit}
+.week-pick select option{color:#111}
+.wp-hint{font-size:11px;color:var(--cream-dim);margin-top:6px}
+.prog-source{margin:6px 20px 0;font-size:12px;color:var(--cream-dim);line-height:1.5;text-align:center}
+.prog-source a{color:var(--gold)}
+.dpi-sub{font-size:11px;color:var(--cream-dim);margin-top:5px}
+.send-card{margin:24px 20px 8px;padding:18px;border:1px solid rgba(196,164,74,0.3);border-radius:14px;background:rgba(196,164,74,0.05)}
+.send-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--white);margin-bottom:4px}
+.send-sub{font-size:12px;color:var(--cream-dim);line-height:1.5;margin-bottom:14px}
+.reflect-send{margin-top:10px;width:100%;background:transparent;border:1px solid rgba(196,164,74,0.5);color:var(--gold);border-radius:10px;padding:13px;font:600 13px 'DM Sans',sans-serif;letter-spacing:.06em;cursor:pointer}
+.fac-link{margin:22px auto 6px;text-align:center;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,0.22);cursor:pointer;padding:8px}
+.fac-load{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:18px}
+.fac-file-btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center}
+.fac-file-btn input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.fac-load-hint{flex-basis:100%;font-size:11.5px;color:var(--cream-dim);line-height:1.5}
+.fac-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.aac-meta{font-size:11px;color:var(--cream-dim);margin-top:6px;line-height:1.5}
+.streak-dot.missed{opacity:.35}
 </style>
 </head>
 <body>
@@ -501,24 +523,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
     <div class="scroll-body" style="padding-bottom:40px;">
       <div class="identity-inner">
         <div class="aea-emblem"><div class="emblem-tri"></div></div>
-        <div class="identity-eyebrow">Cohort I · 2026</div>
+        <div class="identity-eyebrow" id="id-eyebrow">Apex Excellence Academy</div>
         <h1 class="identity-title">Apex<br><span>Excellence</span><br>Academy</h1>
         <p class="identity-sub">Your personal leadership platform. Built for the shift. Designed for the long game.</p>
         <div class="gold-rule"></div>
         <div class="identity-cohort-badge"><div class="cohort-dot"></div>12-Week Program · Active</div>
         <div style="width:100%;max-width:360px;">
           <label class="field-label" for="id-name">Your name</label>
-          <input class="field-input" id="id-name" type="text" placeholder="First name" autocomplete="off" oninput="checkIdentity()">
+          <input class="field-input" id="id-name" type="text" placeholder="First and last name" autocomplete="off" oninput="checkIdentity()">
+          <div class="id-hint" id="id-hint">Use your first and last name so your progress files reach the right folder.</div>
           <label class="field-label" for="id-site">Your site</label>
-          <select class="site-select" id="id-site" onchange="checkIdentity()">
-            <option value="">Select your property</option>
-            <option value="VIA">VIA</option>
-            <option value="Benjamin">Benjamin</option>
-            <option value="Ora">Ora</option>
-            <option value="Franklin">Franklin</option>
-            <option value="HVCC">HVCC</option>
-            <option value="Elevate">Elevate</option>
-          </select>
+          <select class="site-select" id="id-site" onchange="checkIdentity()"><option value="">Select your property</option></select>
           <button class="btn-gold" id="id-enter" disabled onclick="enterApp()">Enter the Academy</button>
         </div>
       </div>
@@ -535,14 +550,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
       <div class="home-week-strip" onclick="navTo('feed')">
         <div class="week-strip-icon">📌</div>
         <div>
-          <div class="week-strip-label">Now active</div>
-          <div class="week-strip-title" id="home-current-week">Week 5 · Vocal Presence</div>
+          <div class="week-strip-label" id="home-week-label">Now active</div>
+          <div class="week-strip-title" id="home-current-week">Week 1</div>
         </div>
         <div class="week-strip-arrow">›</div>
       </div>
       <div class="commitment-preview" id="home-commit-preview">
-        <div class="cp-label">My Commitment</div>
-        <div class="cp-text" id="home-commit-text"><span class="cp-empty" onclick="navTo('commit')">Tap to set your Week 4 commitment →</span></div>
+        <div class="cp-label" onclick="navTo('commit')" style="cursor:pointer">My Commitment ›</div>
+        <div class="cp-text" id="home-commit-text"><span class="cp-empty" onclick="navTo('commit')">Tap to set your commitment →</span></div>
       </div>
       <div class="home-section-label">Quick Access</div>
       <div class="quick-grid">
@@ -582,6 +597,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
       <div class="feed-header">
         <div class="feed-title">Week Feed</div>
         <div class="feed-sub">Your 12-week curriculum — every theme, every challenge.</div>
+        <div class="week-pick" id="week-pick" style="display:none">
+          <label for="week-pick-sel">Your current week</label>
+          <select id="week-pick-sel" onchange="setChosenWeek(this.value)"></select>
+          <div class="wp-hint">Your facilitator will tell you which week the cohort is on.</div>
+        </div>
       </div>
       <div id="feed-cards"></div>
     </div>
@@ -623,7 +643,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
       </div>
       <div class="reflect-week-selector" id="reflect-week-sel"></div>
       <div class="reflect-form" id="reflect-form"></div>
-      <div class="reflect-saved" id="reflect-saved">✓ Reflection saved. Khalif can see your entry.</div>
+      <div class="reflect-saved" id="reflect-saved">✓ Saved on this phone. Tap <b>Send to Facilitator</b> so it reaches your facilitator.</div>
     </div>
   </div>
 
@@ -648,9 +668,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
         <div class="overall-ring-label">Overall Leadership Score</div>
       </div>
       <div class="radar-container" style="margin-top:24px;">
-        <svg viewBox="0 0 260 260" id="progress-radar"></svg>
+        <svg viewBox="-34 0 328 260" id="progress-radar"></svg>
       </div>
+      <div class="prog-source" id="prog-source"></div>
       <div class="dim-progress-list" id="dim-progress-list"></div>
+      <div class="send-card">
+        <div class="send-title">Send to Facilitator</div>
+        <div class="send-sub">Creates one progress file with your reflections, commitment, scenario results and self-assessment. Share it by text, email or Teams.</div>
+        <button class="btn-gold" onclick="sendToFacilitator()">Send to Facilitator</button>
+      </div>
+      <div class="fac-link" onclick="navTo('fac')">Facilitator</div>
     </div>
   </div>
 
@@ -683,7 +710,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
     <div class="scroll-body">
       <div class="fac-header">
         <div class="fac-title">Facilitator View</div>
-        <div class="fac-sub">Cohort activity & agent stats — Khalif only.</div>
+        <div class="fac-sub">Load your agents' progress files to see the cohort. Nothing leaves this computer.</div>
       </div>
       <div class="fac-passcode" id="fac-lock">
         <div class="fac-lock-icon">🔐</div>
@@ -713,21 +740,27 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
       </div>
       <div id="fac-dashboard" style="display:none;padding-bottom:20px;">
         <div class="fac-dashboard">
+          <div class="fac-load">
+            <button class="btn-gold" onclick="facLoadFolder()">Load from Command Center</button>
+            <label class="btn-outline-gold fac-file-btn">Choose files<input type="file" id="fac-files" accept=".json,application/json" multiple onchange="facLoadFiles(this.files)"></label>
+            <div class="fac-load-hint" id="fac-load-hint">Pick your <b>Active_Employees</b> folder (03_PEOPLE_PERFORMANCE) to read every Training_AEA_Progress file, or choose files by hand.</div>
+          </div>
           <div class="fac-stat-row">
-            <div class="fac-stat"><div class="fac-stat-num" id="fac-active">0</div><div class="fac-stat-label">Active Agents</div></div>
-            <div class="fac-stat"><div class="fac-stat-num" id="fac-scenarios">0</div><div class="fac-stat-label">Scenarios Run</div></div>
+            <div class="fac-stat"><div class="fac-stat-num" id="fac-active">0</div><div class="fac-stat-label">Agents Loaded</div></div>
+            <div class="fac-stat"><div class="fac-stat-num" id="fac-scenarios">0</div><div class="fac-stat-label">Scenarios Answered</div></div>
             <div class="fac-stat"><div class="fac-stat-num" id="fac-reflections">0</div><div class="fac-stat-label">Reflections Logged</div></div>
             <div class="fac-stat"><div class="fac-stat-num" id="fac-commits">0</div><div class="fac-stat-label">Commitments Set</div></div>
           </div>
           <div class="fac-section-title" style="margin-bottom:12px;">Cohort Gap Signal</div>
           <div class="cohort-gap-card">
-            <div class="cgc-label">⚠️ Dominant Pattern · Week 4</div>
-            <div class="cgc-text">Communication & Tone surfaced as the primary gap across 5 of 7 agents. Shared weakness: translating individual competence into vocal team presence. Week 5 content is calibrated to this.</div>
+            <div class="cgc-label" id="fac-gap-label">Lowest dimension</div>
+            <div class="cgc-text" id="fac-gap-text">Load progress files to see where the cohort is lowest.</div>
           </div>
           <div class="fac-section-title" style="margin-top:20px;margin-bottom:12px;">Agent Activity</div>
           <div id="fac-agent-list"></div>
-          <div style="margin-top:20px;">
-            <button class="btn-outline-gold" onclick="exportCohortReport()">Export Cohort Report</button>
+          <div class="fac-actions">
+            <button class="btn-outline-gold" onclick="exportCohortReport()">Copy Cohort Report</button>
+            <button class="btn-outline-gold" onclick="exportCohortCSV()">Download CSV</button>
           </div>
         </div>
       </div>
@@ -768,6 +801,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
   }
 })();
 
+// ===== PROGRAM SETTINGS (facilitator edits these two lines for each cohort) =====
+const PROGRAM = {
+  cohort: 'Cohort II',
+  start: ''   // Monday of Week 1 as 'YYYY-MM-DD'. Blank = agents pick their week in the Feed.
+};
+// Site codes match the Ops Command Center (cc_td.js).
+const SITES = [['Benjamin','The Benjamin Seaport'],['VIA','VIA Seaport'],['Ora','Ora Seaport'],['ANS','Avalon North Station'],['ANP','AVA North Point'],['Portfolio','Float / multi-site']];
+const SA_KEY = 'aea_selfassess_v1';
+function esc(t){return String(t==null?'':t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
 // ===== DATA LAYER =====
 const DIMS = [
   {name:'Presence & Professionalism',short:'Presence',color:'#2A7A4A'},
@@ -775,14 +818,14 @@ const DIMS = [
   {name:'Operational Discipline',short:'Ops',color:'#B8720A'},
   {name:'Ownership & Problem-Solving',short:'Ownership',color:'#A32020'},
   {name:'Delegation & Coaching',short:'Coaching',color:'#6B3AAA'},
-  {name:'Judgment & Decisions',short:'Judgment',color:'#185FA5'},
+  {name:'Judgment & Decision-Making',short:'Judgment',color:'#185FA5'},
 ];
 
 const WEEKS = [
   {num:1,theme:'Presence & Professionalism',icon:'🎩',focus:'How you show up before you say a word. Uniform standard. Energy management. The shift-start ritual.',challenge:'For 5 consecutive shifts, be fully set — desk clean, log reviewed, building status known — before the first thing asks something of you.',status:'complete'},
   {num:2,theme:'Communication & Tone',icon:'💬',focus:'Regulate first, then respond. Word choice, volume, and what your silence communicates. Translating competence into presence.',challenge:'Identify one interaction per shift where you redirect a conversation — log what you said and how it landed.',status:'complete'},
   {num:3,theme:'Operational Discipline',icon:'📋',focus:'The invisible work. Shift logs, handoffs, follow-through. If it isn\'t documented, it didn\'t happen.',challenge:'End every shift this week with a complete log — detailed enough that anyone could pick up exactly where you left off.',status:'complete'},
-  {num:4,theme:'Pulse Check — 1:1s',icon:'🔍',focus:'Individual coaching conversations. No group content this week. This is your conversation with Khalif.',challenge:'Be honest in your 1:1. Come with one thing you\'re proud of and one thing you\'re working through.',status:'complete'},
+  {num:4,theme:'Pulse Check — 1:1s',icon:'🔍',focus:'Individual coaching conversations. No group content this week. This is your conversation with your facilitator.',challenge:'Be honest in your 1:1. Come with one thing you\'re proud of and one thing you\'re working through.',status:'complete'},
   {num:5,theme:'Vocal Presence',icon:'📢',focus:'Communicating with your team, not just to residents. Briefing up. Speaking first. Making your thinking audible.',challenge:'Each shift this week, say one thing out loud to your team that you would normally have kept to yourself.',status:'current'},
   {num:6,theme:'Ownership & Problem-Solving',icon:'🔑',focus:'The shift from explaining to owning. Root cause before reaction. Your name on the outcome.',challenge:'When something goes wrong this week, write one sentence: what you\'ll do differently. No context. No explanation. Just the move.',status:'locked'},
   {num:7,theme:'Delegation & Coaching',icon:'🤝',focus:'Stop fixing. Start developing. The question instead of the answer. Trusting someone else\'s outcome.',challenge:'Delegate one task this week that you\'d normally absorb. Let the outcome be theirs.',status:'locked'},
@@ -913,34 +956,24 @@ let state = {
   name: '',
   site: '',
   currentScreen: 'identity',
-  currentWeek: 5,
+  chosenWeek: 1,
   commitment: '',
   commitmentDate: '',
   commitHistory: [],
   reflections: {},
   scenarioScores: {best:0, ok:0, miss:0},
+  scenarioDims: [0,1,2,3,4,5].map(()=>({best:0,ok:0,miss:0})),
   scenarioIndex: 0,
-  weekStreaks: [],
-  dimScores: [72, 58, 65, 61, 54, 70], // pulled from self-assessment baseline
-  pinBuffer: '',
-  facUnlocked: false,
-  agentActivity: [
-    {name:'Jeffrey Pena',site:'VIA',scenarios:4,reflections:1,commit:'I commit to reviewing the shift log before I interact with my first resident each shift.',active:true},
-    {name:'Gautier Victor',site:'Ora',scenarios:2,reflections:0,commit:'',active:true},
-    {name:'Ken Kelly',site:'HVCC',scenarios:5,reflections:1,commit:'I commit to briefing my team at shift start rather than absorbing every task myself.',active:true},
-    {name:'Lilibet Arias',site:'Benjamin',scenarios:3,reflections:1,commit:'I commit to voicing when I\'m at capacity — before I\'m running on empty.',active:true},
-    {name:'Kieria Wagner-Bennett',site:'Elevate',scenarios:6,reflections:2,commit:'I commit to naming one thing my team does well each shift.',active:true},
-    {name:'Misael Gared',site:'Franklin',scenarios:4,reflections:1,commit:'I commit to logging every follow-up I make so nothing disappears.',active:true},
-    {name:'Akyalla Santiago',site:'VIA',scenarios:3,reflections:0,commit:'',active:true},
-  ]
+  facUnlocked: false
 };
 
 // ===== LOAD/SAVE =====
-function save(){try{localStorage.setItem('aea_v1',JSON.stringify(state));}catch(e){}}
+function save(){try{const c=Object.assign({},state);delete c.facUnlocked;localStorage.setItem('aea_v1',JSON.stringify(c));}catch(e){}}
 function load(){
   try{
     const d=localStorage.getItem('aea_v1');
-    if(d){const p=JSON.parse(d);Object.assign(state,p);}
+    if(d){const p=JSON.parse(d);delete p.agentActivity;delete p.dimScores;delete p.currentWeek;delete p.pinBuffer;delete p.facUnlocked;delete p.weekStreaks;Object.assign(state,p);}
+    if(!Array.isArray(state.scenarioDims)||state.scenarioDims.length!==6)state.scenarioDims=[0,1,2,3,4,5].map(()=>({best:0,ok:0,miss:0}));
   }catch(e){}
 }
 
@@ -948,8 +981,15 @@ function load(){
 function checkIdentity(){
   const n=document.getElementById('id-name').value.trim();
   const s=document.getElementById('id-site').value;
-  document.getElementById('id-enter').disabled=n.length<2||!s;
+  const two=n.split(/\s+/).filter(Boolean).length>=2;
+  document.getElementById('id-enter').disabled=!two||!s;
 }
+function setupIdentity(){
+  const sel=document.getElementById('id-site');
+  SITES.forEach(([code,label])=>{const o=document.createElement('option');o.value=code;o.textContent=label;sel.appendChild(o);});
+  document.getElementById('id-eyebrow').textContent=PROGRAM.cohort+' · Apex Excellence Academy';
+}
+function siteName(code){const f=SITES.find(x=>x[0]===code);return f?f[1]:(code||'');}
 function enterApp(){
   state.name=document.getElementById('id-name').value.trim();
   state.site=document.getElementById('id-site').value;
@@ -984,14 +1024,41 @@ function navTo(id){
   window.scrollTo(0,0);
 }
 
+// ===== WEEK =====
+function weekInfo(){
+  if(PROGRAM.start){
+    const p=PROGRAM.start.split('-').map(Number);
+    const start=new Date(p[0],p[1]-1,p[2]);
+    const now=new Date(); now.setHours(0,0,0,0);
+    const diff=Math.floor((now-start)/864e5);
+    if(diff<0) return {n:1,before:true,start};
+    const n=Math.floor(diff/7)+1;
+    return {n:Math.min(n,12),done:n>12,start};
+  }
+  return {n:Math.min(Math.max(parseInt(state.chosenWeek,10)||1,1),12),manual:true};
+}
+function applyWeekStatus(){
+  const cur=weekInfo().n;
+  WEEKS.forEach(w=>{w.status=w.num<cur?'complete':w.num===cur?'current':'locked';});
+}
+function setChosenWeek(v){
+  state.chosenWeek=parseInt(v,10)||1; save();
+  applyWeekStatus(); buildFeed(); buildReflect(); initStreak(); refreshHome();
+  showToast('Week '+state.chosenWeek+' set');
+}
+
 // ===== HOME =====
 function refreshHome(){
-  document.getElementById('home-name').textContent=state.name;
-  const wk=WEEKS.find(w=>w.status==='current')||WEEKS[4];
+  document.getElementById('home-name').textContent=state.name.split(/\s+/)[0];
+  applyWeekStatus();
+  const info=weekInfo();
+  const wk=WEEKS[info.n-1];
+  const lab=document.getElementById('home-week-label');
+  lab.textContent=info.before?('Starts '+info.start.toLocaleDateString('en-US',{month:'short',day:'numeric'})):info.done?'Program complete':'Now active';
   document.getElementById('home-current-week').textContent=`Week ${wk.num} · ${wk.theme}`;
   const ct=document.getElementById('home-commit-text');
   if(state.commitment){
-    ct.innerHTML=`<em>${state.commitment}</em>`;
+    ct.innerHTML=`<em>${esc(state.commitment)}</em>`;
   } else {
     ct.innerHTML=`<span class="cp-empty" onclick="navTo('commit')">Tap to set your commitment →</span>`;
   }
@@ -1001,19 +1068,28 @@ function refreshHome(){
 function initStreak(){
   const dots=document.getElementById('streak-dots');
   dots.innerHTML='';
-  const labels=['W1','W2','W3','W4','W5','W6','W7','W8','W9','W10'];
-  labels.forEach((l,i)=>{
+  const cur=weekInfo().n;
+  for(let i=1;i<=12;i++){
     const d=document.createElement('div');
+    const r=state.reflections[i];
+    const has=r&&(r.rating||Object.keys(r).some(k=>k[0]==='q'&&String(r[k]).trim()));
     d.className='streak-dot';
-    if(i<4)d.className+=' done', d.textContent='✓';
-    else if(i===4)d.className+=' today', d.textContent=l;
-    else d.textContent=l;
+    if(has){d.className+=' done';d.textContent='✓';}
+    else if(i===cur){d.className+=' today';d.textContent='W'+i;}
+    else {d.textContent='W'+i; if(i<cur)d.className+=' missed';}
     dots.appendChild(d);
-  });
+  }
 }
 
 // ===== FEED =====
 function buildFeed(){
+  applyWeekStatus();
+  const pick=document.getElementById('week-pick');
+  if(!PROGRAM.start){
+    pick.style.display='block';
+    const sel=document.getElementById('week-pick-sel');
+    sel.innerHTML=WEEKS.map(w=>`<option value="${w.num}"${w.num===weekInfo().n?' selected':''}>Week ${w.num} · ${esc(w.theme)}</option>`).join('');
+  } else pick.style.display='none';
   const wrap=document.getElementById('feed-cards');
   wrap.innerHTML='';
   WEEKS.forEach(w=>{
@@ -1021,7 +1097,7 @@ function buildFeed(){
     div.className='week-card';
     if(w.status==='locked'){div.style.opacity='.6';}
     const numClass=w.status==='current'?'current':w.status==='complete'?'past':'future';
-    const statusLabel=w.status==='current'?'Active Now':w.status==='complete'?'Complete':'Locked';
+    const statusLabel=w.status==='current'?'Active Now':w.status==='complete'?'Complete':'Upcoming';
     const statusCls=w.status==='current'?'status-active':w.status==='complete'?'status-complete':'status-locked';
     div.innerHTML=`
       <div class="week-card-header">
@@ -1088,6 +1164,7 @@ function selectScOpt(letter,quality){
   else chosen.className='sc-opt selected-miss';
 
   scAnswers.push(quality);
+  if(typeof sc.dim==='number'&&state.scenarioDims[sc.dim]){state.scenarioDims[sc.dim][quality]++;save();}
   const fb=document.getElementById('sc-feedback');
   document.getElementById('sc-feedback-text').textContent=sc.feedback[quality];
   fb.classList.add('show');
@@ -1134,20 +1211,23 @@ const REFLECT_QS = {
   1:['What did your presence look like this week? Be specific — what did you do differently?','Where did your standard slip? Name the moment.','What\'s one thing you\'ll carry into next week from this theme?'],
   2:['Describe one moment where you regulated before responding. What happened?','When did pressure change your tone? What did you notice?','What\'s one phrase or approach you\'re committing to for communication?'],
   3:['How complete were your shift logs this week? Honest answer.','What fell through the cracks — and what would have prevented it?','What does a \'complete handoff\' look like for you now?'],
-  4:['What did you take away from your 1:1 with Khalif?','What\'s the one thing you said in that conversation that surprised you?','What commitment did you leave with?'],
+  4:['What did you take away from your 1:1 with your facilitator?','What\'s the one thing you said in that conversation that surprised you?','What commitment did you leave with?'],
   5:['Did you speak first this week — or wait to be asked?','What did you say out loud to your team that you would have kept to yourself before?','Where does your voice need to go next week?'],
   6:['Describe a moment where you owned an outcome — not just a task.','When did you catch yourself explaining instead of owning?','What does ownership look like at 100% for you?'],
   7:['Who did you develop this week, even in a small way?','What did you resist the urge to do yourself — and hand off instead?','What question did you ask instead of giving an answer?'],
   8:['What did you notice this week that nobody asked you to notice?','How did your environmental scanning change the shift?','What are you watching for now that you weren\'t before?'],
   9:['Describe a decision you made under pressure. What was your reasoning?','When did you escalate, and was the timing right?','What does your prioritization sequence feel like now — instinct or effort?'],
+  11:['Where did you lead through others this week, not just your own effort?','Which standard did you hold with no one watching?','What evaluation feedback will you act on first?'],
+  12:['Compared with Week 1, what is the biggest change in how you lead?','Which dimension will you keep building after the Academy?','What do you commit to as a leader at your site?'],
   10:['This week is integration. Which dimension felt strongest?','Which one still costs you effort?','What does your leadership profile look like right now — in your own words?'],
 };
 function buildReflect(){
   const sel=document.getElementById('reflect-week-sel');
   sel.innerHTML='';
-  [1,2,3,4,5].forEach(w=>{
+  const cur=weekInfo().n;
+  for(let w=1;w<=cur;w++){
     const chip=document.createElement('div');
-    chip.className='rws-chip'+(w===5?' active':'');
+    chip.className='rws-chip'+(w===cur?' active':'');
     chip.textContent='Week '+w;
     chip.onclick=()=>{
       document.querySelectorAll('.rws-chip').forEach(c=>c.classList.remove('active'));
@@ -1155,11 +1235,12 @@ function buildReflect(){
       renderReflectForm(w);
     };
     sel.appendChild(chip);
-  });
-  renderReflectForm(5);
+  }
+  renderReflectForm(cur);
 }
 function renderReflectForm(week){
-  const qs=REFLECT_QS[week]||REFLECT_QS[5];
+  const qs=REFLECT_QS[week]||REFLECT_QS[10];
+  if(saved0(week))tempRatings[week]=state.reflections[week].rating;
   const saved=state.reflections[week]||{};
   const form=document.getElementById('reflect-form');
   form.innerHTML='';
@@ -1169,7 +1250,7 @@ function renderReflectForm(week){
     div.innerHTML=`
       <div class="reflect-q-num">Reflection ${i+1}</div>
       <div class="reflect-q-label">${q}</div>
-      <textarea class="reflect-textarea" id="rq-${week}-${i}" placeholder="Write honestly — this is for you.">${saved['q'+i]||''}</textarea>
+      <textarea class="reflect-textarea" id="rq-${week}-${i}" placeholder="Write honestly.">${esc(saved['q'+i]||'')}</textarea>
     `;
     form.appendChild(div);
   });
@@ -1185,7 +1266,7 @@ function renderReflectForm(week){
   form.appendChild(ratingDiv);
   const submitDiv=document.createElement('div');
   submitDiv.style.marginBottom='20px';
-  submitDiv.innerHTML=`<button class="reflect-submit" onclick="saveReflection(${week})">Save Reflection</button>`;
+  submitDiv.innerHTML=`<button class="reflect-submit" onclick="saveReflection(${week})">Save Reflection</button><button class="reflect-send" onclick="saveReflection(${week});sendToFacilitator()">Save &amp; Send to Facilitator</button>`;
   form.appendChild(submitDiv);
   document.getElementById('reflect-saved').classList.remove('show');
 }
@@ -1196,8 +1277,9 @@ function selectRating(week,n){
     d.classList.toggle('selected',i+1===n);
   });
 }
+function saved0(w){return state.reflections[w]&&state.reflections[w].rating;}
 function saveReflection(week){
-  const qs=REFLECT_QS[week]||REFLECT_QS[5];
+  const qs=REFLECT_QS[week]||REFLECT_QS[10];
   const data={rating:tempRatings[week]||null};
   qs.forEach((_,i)=>{
     const el=document.getElementById(`rq-${week}-${i}`);
@@ -1205,41 +1287,56 @@ function saveReflection(week){
   });
   state.reflections[week]=data;
   save();
+  initStreak();
   document.getElementById('reflect-saved').classList.add('show');
   showToast('Reflection saved ✓');
 }
 
 // ===== PROGRESS =====
+function loadSA(){try{const d=JSON.parse(localStorage.getItem(SA_KEY)||'null');if(d&&Array.isArray(d.scores)&&d.scores.length===6)return d;}catch(e){}return null;}
+function dimScores(){const sa=loadSA();return sa?sa.scores.map(v=>Math.round(v)):[0,0,0,0,0,0];}
 function buildProgress(){
+  const sa=loadSA();
+  const src=document.getElementById('prog-source');
+  src.innerHTML=sa?`Baseline from your self-assessment on ${esc(sa.date||'')}. <a href="AEA_Leadership_Self_Assessment.html">Retake it</a>`
+    :`No baseline yet. <a href="AEA_Leadership_Self_Assessment.html">Take the self-assessment</a> on this phone (about 10 minutes) and your profile appears here.`;
+  const sc=dimScores();
   const list=document.getElementById('dim-progress-list');
   list.innerHTML='';
   DIMS.forEach((d,i)=>{
-    const pct=state.dimScores[i]||0;
+    const pct=sc[i]||0;
+    const s=state.scenarioDims[i]||{best:0,ok:0,miss:0};
+    const tot=s.best+s.ok+s.miss;
     const div=document.createElement('div');
     div.className='dim-prog-item';
     div.innerHTML=`
       <div class="dpi-top">
         <div class="dpi-name"><div class="dpi-dot" style="background:${d.color}"></div>${d.name}</div>
-        <div class="dpi-pct">${pct}%</div>
+        <div class="dpi-pct">${sa?pct+'%':'—'}</div>
       </div>
       <div class="dpi-bar-wrap"><div class="dpi-bar" id="dpb-${i}" style="width:0%;background:${d.color}"></div></div>
+      <div class="dpi-sub">${tot?`Scenarios: ${s.best} best of ${tot}`:'No scenarios answered yet'}</div>
     `;
     list.appendChild(div);
   });
 }
 function animateProgress(){
-  const overall=Math.round(state.dimScores.reduce((a,b)=>a+b,0)/state.dimScores.length);
+  buildProgress();
+  const scores=dimScores();
+  const has=!!loadSA();
+  const overall=has?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):0;
   const ring=document.getElementById('overall-ring');
   const circ=364.4;
   setTimeout(()=>{
     ring.style.strokeDashoffset=circ-(circ*overall/100);
   },200);
   let n=0;
-  const timer=setInterval(()=>{n=Math.min(n+2,overall);document.getElementById('overall-pct-display').textContent=n+'%';if(n>=overall)clearInterval(timer);},20);
+  if(!has){document.getElementById('overall-pct-display').textContent='—';}
+  else{const timer=setInterval(()=>{n=Math.min(n+2,overall);document.getElementById('overall-pct-display').textContent=n+'%';if(n>=overall)clearInterval(timer);},20);}
   setTimeout(()=>{
-    state.dimScores.forEach((_,i)=>{
+    scores.forEach((v,i)=>{
       const bar=document.getElementById('dpb-'+i);
-      if(bar)bar.style.width=state.dimScores[i]+'%';
+      if(bar)bar.style.width=v+'%';
     });
   },300);
   drawProgressRadar();
@@ -1257,7 +1354,8 @@ function drawProgressRadar(){
   angles.forEach(a=>{
     html+=`<line x1="${cx}" y1="${cy}" x2="${cx+r*Math.cos(a)}" y2="${cy+r*Math.sin(a)}" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>`;
   });
-  const dataPts=angles.map((a,i)=>[cx+(state.dimScores[i]/100)*r*Math.cos(a),cy+(state.dimScores[i]/100)*r*Math.sin(a)]);
+  const ds=dimScores();
+  const dataPts=angles.map((a,i)=>[cx+(ds[i]/100)*r*Math.cos(a),cy+(ds[i]/100)*r*Math.sin(a)]);
   html+=`<polygon points="${dataPts.map(p=>p.join(',')).join(' ')}" fill="rgba(196,164,74,0.12)" stroke="var(--gold)" stroke-width="1.5"/>`;
   dataPts.forEach((p,i)=>{
     html+=`<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="${DIMS[i].color}" stroke="var(--navy)" stroke-width="1.5"/>`;
@@ -1281,8 +1379,8 @@ function buildCommit(){
     histWrap.style.display='block';
     histList.innerHTML=state.commitHistory.map(h=>`
       <div class="commit-log-item">
-        <div class="cli-date">${h.date}</div>
-        <div class="cli-text">${h.text}</div>
+        <div class="cli-date">${esc(h.date)}</div>
+        <div class="cli-text">${esc(h.text)}</div>
       </div>
     `).join('');
   }
@@ -1314,7 +1412,7 @@ function saveCommitment(){
 }
 
 // ===== FACILITATOR =====
-const FAC_PIN='1234'; // Change this to Khalif's actual code
+const FAC_PIN='1234'; // Facilitator passcode. The view only shows files you load on your own computer.
 let pinBuffer='';
 function pinKey(k){
   if(pinBuffer.length>=4)return;
@@ -1354,45 +1452,126 @@ function buildFac(){
     renderFacDashboard();
   }
 }
+// ----- agent: build and share a progress file (same naming style as the NHE packet) -----
+function progressFile(){
+  const parts=state.name.trim().split(/\s+/);
+  const first=(parts[0]||'Agent').replace(/[^A-Za-z0-9-]/g,'');
+  const last=(parts.length>1?parts[parts.length-1]:'Agent').replace(/[^A-Za-z0-9-]/g,'');
+  const d=new Date(), ymd=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  const sa=loadSA();
+  const data={kind:'apex-aea-progress',v:1,program:PROGRAM.cohort,exportedAt:d.toISOString(),
+    agent:{name:state.name.trim(),site:state.site,siteName:siteName(state.site)},
+    week:weekInfo().n,reflections:state.reflections,commitment:state.commitment,commitmentDate:state.commitmentDate,
+    commitHistory:state.commitHistory,scenarioScores:state.scenarioScores,scenarioDims:state.scenarioDims,
+    dims:DIMS.map(x=>x.name),selfAssessment:sa};
+  return {name:`AEA_Progress_${last}_${first}_${ymd}.json`,text:JSON.stringify(data,null,1)};
+}
+async function sendToFacilitator(){
+  if(!state.name){showToast('Enter your name first');return;}
+  const f=progressFile();
+  try{
+    const file=new File([f.text],f.name,{type:'application/json'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      await navigator.share({files:[file],title:'AEA progress — '+state.name,text:'My Apex Excellence Academy progress file.'});
+      showToast('Sent ✓');return;
+    }
+  }catch(e){if(e&&e.name==='AbortError')return;}
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([f.text],{type:'application/json'}));a.download=f.name;
+  document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},800);
+  showToast('File saved — email or text it to your facilitator');
+}
+
+// ----- facilitator: read real progress files (memory only, nothing stored) -----
+let facAgents={};
+function facAdd(obj,fileName){
+  if(!obj||obj.kind!=='apex-aea-progress'||!obj.agent||!obj.agent.name)return false;
+  const k=obj.agent.name.trim().toLowerCase();
+  if(!facAgents[k]||String(obj.exportedAt)>String(facAgents[k].exportedAt))facAgents[k]=Object.assign({},obj,{_file:fileName});
+  return true;
+}
+async function facLoadFiles(list){
+  let n=0;
+  for(const f of Array.from(list||[])){try{if(facAdd(JSON.parse(await f.text()),f.name))n++;}catch(e){}}
+  document.getElementById('fac-load-hint').textContent=n+' progress file(s) read.';
+  renderFacDashboard();
+}
+async function facLoadFolder(){
+  if(!window.showDirectoryPicker){document.getElementById('fac-load-hint').textContent='This browser can\'t open folders. Use Chrome or Edge, or choose files.';return;}
+  let dir;try{dir=await window.showDirectoryPicker({mode:'read'});}catch(e){return;}
+  let n=0,seen=0;
+  const re=/^(Training_)?AEA_Progress_.*\.json$/i;
+  async function walk(h,depth){
+    for await (const [name,entry] of h.entries()){
+      if(entry.kind==='file'&&re.test(name)){seen++;try{if(facAdd(JSON.parse(await (await entry.getFile()).text()),name))n++;}catch(e){}}
+      else if(entry.kind==='directory'&&depth<3&&!/^(90_|91_|92_|99_|_)/.test(name))await walk(entry,depth+1);
+    }
+  }
+  document.getElementById('fac-load-hint').textContent='Reading…';
+  await walk(dir,0);
+  document.getElementById('fac-load-hint').textContent=n+' progress file(s) read from '+dir.name+'.';
+  renderFacDashboard();
+}
+function facList(){return Object.values(facAgents).sort((a,b)=>a.agent.name.localeCompare(b.agent.name));}
+function reflCount(a){return Object.values(a.reflections||{}).filter(r=>r&&(r.rating||Object.keys(r).some(k=>k[0]==='q'&&String(r[k]).trim()))).length;}
+function scenSums(a){if(Array.isArray(a.scenarioDims)){return a.scenarioDims.reduce((t,d)=>({best:t.best+(d.best||0),ok:t.ok+(d.ok||0),miss:t.miss+(d.miss||0)}),{best:0,ok:0,miss:0});}const s=a.scenarioScores||{};return {best:s.best||0,ok:s.ok||0,miss:s.miss||0};}
+function scenTotal(a){const s=scenSums(a);return s.best+s.ok+s.miss;}
+function lowestDim(scores){let i=-1,v=101;(scores||[]).forEach((x,j)=>{if(x<v){v=x;i=j;}});return i;}
 function renderFacDashboard(){
-  const agents=state.agentActivity;
-  document.getElementById('fac-active').textContent=agents.filter(a=>a.active).length;
-  document.getElementById('fac-scenarios').textContent=agents.reduce((s,a)=>s+a.scenarios,0);
-  document.getElementById('fac-reflections').textContent=agents.reduce((s,a)=>s+a.reflections,0);
-  document.getElementById('fac-commits').textContent=agents.filter(a=>a.commit).length;
+  const agents=facList();
+  document.getElementById('fac-active').textContent=agents.length;
+  document.getElementById('fac-scenarios').textContent=agents.reduce((s,a)=>s+scenTotal(a),0);
+  document.getElementById('fac-reflections').textContent=agents.reduce((s,a)=>s+reflCount(a),0);
+  document.getElementById('fac-commits').textContent=agents.filter(a=>a.commitment).length;
+  const withSA=agents.filter(a=>a.selfAssessment&&Array.isArray(a.selfAssessment.scores));
+  if(withSA.length){
+    const avg=DIMS.map((_,i)=>Math.round(withSA.reduce((s,a)=>s+a.selfAssessment.scores[i],0)/withSA.length));
+    const lo=lowestDim(avg), lowCount=withSA.filter(a=>lowestDim(a.selfAssessment.scores)===lo).length;
+    document.getElementById('fac-gap-label').textContent='Lowest dimension · '+withSA.length+' self-assessment(s)';
+    document.getElementById('fac-gap-text').textContent=`${DIMS[lo].name} averages ${avg[lo]}%, and it is the lowest area for ${lowCount} of ${withSA.length} agent(s). Cohort averages: `+DIMS.map((d,i)=>d.short+' '+avg[i]+'%').join(' · ')+'.';
+  } else {
+    document.getElementById('fac-gap-label').textContent='Lowest dimension';
+    document.getElementById('fac-gap-text').textContent=agents.length?'None of the loaded files include a self-assessment yet.':'Load progress files to see where the cohort is lowest.';
+  }
   const list=document.getElementById('fac-agent-list');
-  list.innerHTML=agents.map(a=>`
-    <div class="agent-activity-card">
+  if(!agents.length){list.innerHTML='<div class="aac-commit" style="opacity:.6">No progress files loaded yet.</div>';return;}
+  list.innerHTML=agents.map(a=>{
+    const sa=a.selfAssessment, lo=sa?lowestDim(sa.scores):-1, s=scenSums(a);
+    return `<div class="agent-activity-card">
       <div class="aac-top">
-        <div><div class="aac-name">${a.name}</div><div class="aac-site">${a.site}</div></div>
+        <div><div class="aac-name">${esc(a.agent.name)}</div><div class="aac-site">${esc(a.agent.siteName||a.agent.site)} · Week ${esc(a.week)}</div></div>
         <div class="aac-badges">
-          ${a.active?'<span class="aac-badge badge-active">Active</span>':''}
-          ${a.scenarios>0?`<span class="aac-badge badge-scenarios">${a.scenarios} scenarios</span>`:''}
-          ${a.reflections>0?`<span class="aac-badge badge-reflect">${a.reflections} reflections</span>`:''}
+          ${scenTotal(a)?`<span class="aac-badge badge-scenarios">${scenTotal(a)} scenarios</span>`:''}
+          ${reflCount(a)?`<span class="aac-badge badge-reflect">${reflCount(a)} reflections</span>`:''}
         </div>
       </div>
-      ${a.commit?`<div class="aac-commit">"${a.commit}"</div>`:'<div class="aac-commit" style="opacity:.5;">No commitment set yet.</div>'}
-    </div>
-  `).join('');
+      ${a.commitment?`<div class="aac-commit">"${esc(a.commitment)}"</div>`:'<div class="aac-commit" style="opacity:.5;">No commitment set yet.</div>'}
+      <div class="aac-meta">Scenarios: ${s.best||0} best · ${s.ok||0} close · ${s.miss||0} growth${sa?` · Self-assessment ${esc(sa.date||'')}: lowest ${esc(DIMS[lo].short)} (${Math.round(sa.scores[lo])}%)`:' · No self-assessment'}<br>Updated ${esc(new Date(a.exportedAt).toLocaleDateString())}</div>
+    </div>`;}).join('');
 }
 function exportCohortReport(){
-  const agents=state.agentActivity;
-  let report=`APEX EXCELLENCE ACADEMY — COHORT I\nFacilitator Report · Week 5\nGenerated: ${new Date().toLocaleDateString()}\n\n`;
-  report+=`COHORT OVERVIEW\n`;
-  report+=`Active Agents: ${agents.filter(a=>a.active).length}/7\n`;
-  report+=`Total Scenarios Run: ${agents.reduce((s,a)=>s+a.scenarios,0)}\n`;
-  report+=`Total Reflections Logged: ${agents.reduce((s,a)=>s+a.reflections,0)}\n`;
-  report+=`Commitments Set: ${agents.filter(a=>a.commit).length}/7\n\n`;
-  report+=`COHORT GAP SIGNAL\nCommunication & Tone surfaced as the primary development area across 5 of 7 agents.\nShared gap: translating individual competence into vocal team presence.\n\n`;
-  report+=`AGENT ACTIVITY\n${'-'.repeat(40)}\n`;
+  const agents=facList();
+  if(!agents.length){showToast('Load progress files first');return;}
+  let report=`APEX EXCELLENCE ACADEMY — ${PROGRAM.cohort.toUpperCase()}\nFacilitator Report · Generated ${new Date().toLocaleDateString()}\n\n`;
+  report+=`Agents: ${agents.length}\nScenarios answered: ${agents.reduce((s,a)=>s+scenTotal(a),0)}\nReflections logged: ${agents.reduce((s,a)=>s+reflCount(a),0)}\nCommitments set: ${agents.filter(a=>a.commitment).length}/${agents.length}\n\n`;
+  report+=document.getElementById('fac-gap-text').textContent+'\n\nAGENT ACTIVITY\n'+'-'.repeat(40)+'\n';
   agents.forEach(a=>{
-    report+=`\n${a.name} · ${a.site}\n`;
-    report+=`  Scenarios: ${a.scenarios} | Reflections: ${a.reflections}\n`;
-    report+=`  Commitment: ${a.commit||'Not set'}\n`;
+    const sa=a.selfAssessment, lo=sa?lowestDim(sa.scores):-1;
+    report+=`\n${a.agent.name} · ${a.agent.siteName||a.agent.site} · Week ${a.week}\n  Scenarios: ${scenTotal(a)} | Reflections: ${reflCount(a)}${sa?` | Lowest: ${DIMS[lo].name} (${Math.round(sa.scores[lo])}%)`:''}\n  Commitment: ${a.commitment||'Not set'}\n`;
   });
-  try{
-    navigator.clipboard.writeText(report).then(()=>showToast('Report copied ✓'));
-  }catch(e){showToast('Report ready — copy from console');}
+  try{navigator.clipboard.writeText(report).then(()=>showToast('Report copied ✓'),()=>showToast('Copy blocked by the browser'));}catch(e){showToast('Copy blocked by the browser');}
+}
+function exportCohortCSV(){
+  const agents=facList();
+  if(!agents.length){showToast('Load progress files first');return;}
+  const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+  const head=['Agent','Property','Week','Last update','Reflections','Scenarios best','Scenarios close','Scenarios growth','Commitment'].concat(DIMS.map(d=>d.name+' (self-assessment %)'),['Lowest dimension','Self-assessment date']);
+  const rows=agents.map(a=>{const sa=a.selfAssessment,s=scenSums(a),lo=sa?lowestDim(sa.scores):-1;
+    return [a.agent.name,a.agent.site,a.week,(a.exportedAt||'').slice(0,10),reflCount(a),s.best||0,s.ok||0,s.miss||0,a.commitment||''].concat(DIMS.map((_,i)=>sa?Math.round(sa.scores[i]):''),[sa?DIMS[lo].name:'',sa?sa.date:'']);});
+  const csv=[head].concat(rows).map(r=>r.map(q).join(',')).join('\r\n');
+  const d=new Date(), ymd=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=`AEA_${PROGRAM.cohort.replace(/\s+/g,'_')}_Activity_${ymd}.csv`;
+  document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},800);
+  showToast('CSV downloaded');
 }
 
 // ===== TOAST =====
@@ -1405,6 +1584,8 @@ function showToast(msg){
 
 // ===== INIT =====
 load();
+setupIdentity();
+applyWeekStatus();
 if(state.name&&state.site){
   document.getElementById('screen-identity').classList.remove('active');
   document.getElementById('bottom-nav').style.display='flex';
