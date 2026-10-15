@@ -432,6 +432,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
 .fac-key.del{color:var(--cream-dim);font-size:14px;}
 .fac-key.empty{visibility:hidden;}
 .fac-wrong{font-size:12px;color:#E05050;margin-top:12px;display:none;}
+.fac-forgot{background:none;border:0;color:var(--cream-dim);font-size:12px;text-decoration:underline;margin-top:14px;cursor:pointer;font-family:inherit}
 /* FAC DASHBOARD */
 .fac-dashboard{padding:0 20px;}
 .fac-stat-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
@@ -758,6 +759,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);
           <div class="fac-key del" onclick="pinDel()">⌫</div>
         </div>
         <div class="fac-wrong" id="pin-wrong">Incorrect passcode. Try again.</div>
+        <button class="fac-forgot" type="button" onclick="forgotPin()">Forgot passcode?</button>
+        <div id="fac-recover" style="display:none;margin-top:12px">
+          <input class="field-input" id="rec-word" type="password" autocomplete="off" placeholder="Recovery word">
+          <div class="adm-btns"><button class="btn-outline-gold" type="button" onclick="recoverPins()">Reset passcodes on this device</button></div>
+          <div class="adm-hint">Puts both staff passcodes on this device back to the program defaults. Agent progress on this device is not touched. The recovery word is kept by the program owner.</div>
+        </div>
       </div>
       <div id="admin-panel" style="display:none;padding-bottom:24px;">
         <div class="fac-dashboard">
@@ -1490,6 +1497,12 @@ function saveCommitment(){
 const PIN_DEFAULTS={fac:'1234',admin:'2026'};
 const PIN_KEY='aea_pins_v1';
 function pinHash(p){let h=5381;const t='aea:'+p;for(let i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))>>>0;return h.toString(36);}
+// Recovery (added 2026-10-14): "Forgot passcode?" on the lock screen. The right recovery word clears this device's custom
+// passcodes so the defaults work again. Only the word's hash is stored here; the program owner keeps the word.
+const RECOVERY_HASH='yl0d6r';
+function recHash(w){let h=5381;const t='aea-recover:'+String(w).trim().toUpperCase();for(let i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))>>>0;return h.toString(36);}
+function forgotPin(){const r=document.getElementById('fac-recover');r.style.display=r.style.display==='none'?'block':'none';if(r.style.display==='block')document.getElementById('rec-word').focus();}
+function recoverPins(){const w=document.getElementById('rec-word');if(recHash(w.value)!==RECOVERY_HASH){showToast('That recovery word doesn\'t match');return;}try{localStorage.removeItem(PIN_KEY);}catch(e){}w.value='';document.getElementById('fac-recover').style.display='none';showToast('Passcodes reset on this device — use the default passcode');}
 function pinOk(role,p){try{const m=JSON.parse(localStorage.getItem(PIN_KEY)||'{}');if(m[role])return m[role]===pinHash(p);}catch(e){}return p===PIN_DEFAULTS[role];}
 let pinBuffer='', loginRole='fac', staffOpen={fac:false,admin:false};
 function openLogin(role){
@@ -1551,6 +1564,7 @@ function updatePinDisplay(){
 document.addEventListener('keydown',e=>{
   const lock=document.getElementById('fac-lock');
   if(!document.getElementById('screen-fac').classList.contains('active')||!lock||lock.style.display==='none')return;
+  if(e.target&&/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;
   if(/^[0-9]$/.test(e.key))pinKey(e.key); else if(e.key==='Backspace')pinDel(); else if(e.key==='Escape')exitStaff();
 });
 function buildFac(){}
